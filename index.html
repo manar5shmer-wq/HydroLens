@@ -16,11 +16,16 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            purple: '#9D7BE4',
+                        soft: {
+                            bg: '#FBF9F5',
+                            card: '#FFFFFF',
+                            beige: '#F3EFE6',
+                            purple: '#8A73D6',
+                            purpleLight: '#E8E2F8',
                             blue: '#5CA4EA',
-                            darkBg: '#0F1020',
-                            cardBg: 'rgba(25, 27, 48, 0.75)',
+                            blueLight: '#E3F0FC',
+                            textDark: '#1E2538',
+                            textMuted: '#6E7891',
                         }
                     },
                     fontFamily: {
@@ -33,221 +38,221 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #0F1020;
-            background-image: radial-gradient(circle at top right, rgba(157, 123, 228, 0.15), transparent 40%),
-                              radial-gradient(circle at bottom left, rgba(92, 164, 234, 0.15), transparent 40%);
+            background-color: #F3EFE6;
+            background-image: radial-gradient(circle at top right, rgba(138, 115, 214, 0.08), transparent 50%),
+                              radial-gradient(circle at bottom left, rgba(92, 164, 234, 0.08), transparent 50%);
             min-height: 100vh;
+            color: #1E2538;
         }
 
-        .glass-panel {
-            background: rgba(25, 27, 48, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(157, 123, 228, 0.25);
+        .soft-card {
+            background: #FFFFFF;
+            box-shadow: 0 10px 30px rgba(138, 115, 214, 0.06);
+            border: 1px solid rgba(232, 226, 248, 0.8);
         }
 
-        .glow-purple {
-            box-shadow: 0 0 25px rgba(157, 123, 228, 0.35);
+        .soft-button-purple {
+            background: linear-gradient(135deg, #8A73D6 0%, #73B3F3 100%);
+            box-shadow: 0 6px 20px rgba(138, 115, 214, 0.25);
         }
 
-        .glow-blue {
-            box-shadow: 0 0 25px rgba(92, 164, 234, 0.35);
-        }
-
-        /* Water Spray Animation */
-        @keyframes mistAnimation {
-            0% { opacity: 0; transform: scale(0.5) translateY(0); }
-            50% { opacity: 0.8; transform: scale(1.2) translateY(-15px); }
-            100% { opacity: 0; transform: scale(1.5) translateY(-30px); }
-        }
-
-        .mist-particle {
-            position: absolute;
-            background: radial-gradient(circle, rgba(92, 164, 234, 0.8) 0%, rgba(157, 123, 228, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: mistAnimation 1.5s ease-out infinite;
+        .soft-button-blue {
+            background: linear-gradient(135deg, #5CA4EA 0%, #8A73D6 100%);
+            box-shadow: 0 6px 20px rgba(92, 164, 234, 0.25);
         }
     </style>
 </head>
-<body class="text-white flex items-center justify-center min-h-screen p-0 md:p-4">
+<body class="flex items-center justify-center min-h-screen p-0 md:p-4">
 
-    <!-- Main Container Simulation Mobile View -->
-    <div class="w-full max-w-md h-screen md:h-[840px] glass-panel md:rounded-[40px] flex flex-col justify-between overflow-hidden relative shadow-2xl">
+    <!-- Mobile Screen Frame Container -->
+    <div class="w-full max-w-md h-screen md:h-[850px] bg-soft-bg md:rounded-[40px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-soft-beige">
         
-        <!-- Top Status Bar (App Native Look) -->
-        <div class="px-6 pt-4 pb-2 flex justify-between items-center text-xs text-gray-400 z-10">
-            <span id="currentTime">12:00</span>
+        <!-- Top Status Bar -->
+        <div class="px-6 pt-4 pb-2 flex justify-between items-center text-xs text-soft-textMuted z-10">
+            <span id="currentTime" class="font-bold">12:00</span>
             <div class="flex items-center gap-2">
-                <span id="bluetoothStatus" class="flex items-center gap-1 text-emerald-400">
-                    <i class="fa-solid fa-bluetooth"></i> متصل
+                <span id="bluetoothStatus" class="flex items-center gap-1 text-emerald-600 font-semibold">
+                    <i class="fa-solid fa-bluetooth text-soft-blue"></i> متصل
                 </span>
-                <i class="fa-solid fa-wifi text-brand-blue"></i>
-                <i class="fa-solid fa-battery-full text-brand-purple"></i>
+                <i class="fa-solid fa-wifi text-soft-blue"></i>
+                <i class="fa-solid fa-battery-three-quarters text-soft-purple"></i>
             </div>
         </div>
 
-        <!-- Notification Toast -->
-        <div id="toastNotification" class="absolute top-12 left-4 right-4 bg-emerald-500/90 text-white text-xs px-4 py-3 rounded-2xl flex items-center justify-between shadow-lg transition-all duration-300 transform -translate-y-20 opacity-0 z-50">
+        <!-- Toast Notification -->
+        <div id="toastNotification" class="absolute top-12 left-4 right-4 bg-soft-textDark text-white text-xs px-4 py-3 rounded-2xl flex items-center justify-between shadow-xl transition-all duration-300 transform -translate-y-20 opacity-0 z-50">
             <div class="flex items-center gap-2">
-                <i class="fa-solid fa-circle-check text-base"></i>
-                <span id="toastMessage">تم العملية بنجاح!</span>
+                <i class="fa-solid fa-circle-check text-soft-blue text-sm"></i>
+                <span id="toastMessage">تمت العملية بنجاح!</span>
             </div>
-            <button onclick="hideToast()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="hideToast()" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <!-- VIEW 1: AUTHENTICATION & GLASSES REGISTRATION SCREEN -->
+        <!-- VIEW 1: AUTHENTICATION & LOGIN SCREEN -->
         <div id="authScreen" class="flex-1 flex flex-col justify-between p-6 z-10 transition-all duration-300">
             <div class="text-center my-auto">
-                <!-- App Logo -->
-                <div class="w-24 h-24 mx-auto mb-4 rounded-3xl bg-gradient-to-tr from-brand-purple to-brand-blue p-0.5 glow-purple">
-                    <div class="w-full h-full bg-brand-darkBg rounded-[22px] flex items-center justify-center">
-                        <i class="fa-solid fa-glasses text-4xl text-transparent bg-clip-text bg-gradient-to-r from-brand-purple to-brand-blue"></i>
-                    </div>
+                <!-- App Icon -->
+                <div class="w-24 h-24 mx-auto mb-4 rounded-3xl bg-soft-purpleLight flex items-center justify-center border border-soft-purple/30 shadow-sm">
+                    <i class="fa-solid fa-glasses text-4xl text-soft-purple"></i>
                 </div>
-                <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-purple via-white to-brand-blue mb-1">HydroLens</h1>
-                <p class="text-xs text-gray-400">النظام الذكي لحماية العين من الجفاف والإجهاد</p>
+                <h1 class="text-3xl font-extrabold text-soft-textDark mb-1">HydroLens</h1>
+                <p class="text-xs text-soft-textMuted font-medium">نظام العناية الذكية وترطيب العين</p>
             </div>
 
             <!-- Auth Form -->
             <div class="space-y-4 my-auto">
                 <div class="space-y-1">
-                    <label class="text-xs font-semibold text-brand-blue pr-1"><i class="fa-solid fa-envelope ml-1"></i> البريد الإلكتروني</label>
-                    <input type="email" id="emailInput" value="student@HydroLens.edu.sa" placeholder="أدخل البريد الإلكتروني" class="w-full bg-white/5 border border-brand-purple/30 focus:border-brand-purple rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                    <label class="text-xs font-bold text-soft-textDark pr-1"><i class="fa-solid fa-envelope text-soft-purple ml-1"></i> البريد الإلكتروني</label>
+                    <input type="email" id="emailInput" value="student@HydroLens.edu.sa" placeholder="أدخل الإيميل" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
-                <!-- OTP Input Area -->
+                <!-- OTP Input -->
                 <div class="space-y-1">
                     <div class="flex justify-between items-center pr-1">
-                        <label class="text-xs font-semibold text-brand-purple"><i class="fa-solid fa-key ml-1"></i> رمز التحقق (OTP)</label>
-                        <button onclick="sendOTP()" class="text-[11px] text-brand-blue hover:underline">إرسال الرمز <i class="fa-solid fa-paper-plane"></i></button>
+                        <label class="text-xs font-bold text-soft-textDark"><i class="fa-solid fa-key text-soft-blue ml-1"></i> رمز التحقق (OTP)</label>
+                        <button onclick="sendOTP()" class="text-[11px] text-soft-purple font-bold hover:underline">إرسال الرمز <i class="fa-solid fa-paper-plane"></i></button>
                     </div>
-                    <input type="text" id="otpInput" placeholder="أدخل رمز الـ OTP (مثال: 123456)" class="w-full bg-white/5 border border-brand-blue/30 focus:border-brand-blue rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                    <input type="text" id="otpInput" placeholder="رمز OTP (مثال: 123456)" class="w-full bg-white border border-soft-purpleLight focus:border-soft-blue rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
                 <!-- Glasses ID Input -->
                 <div class="space-y-1">
-                    <label class="text-xs font-semibold text-brand-blue pr-1"><i class="fa-solid fa-qrcode ml-1"></i> معرّف النظارة (Glasses ID)</label>
-                    <input type="text" id="glassesIdInput" value="HL-9024" placeholder="مثال: HL-9024" class="w-full bg-white/5 border border-brand-purple/30 focus:border-brand-purple rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 outline-none transition-all">
+                    <label class="text-xs font-bold text-soft-textDark pr-1"><i class="fa-solid fa-qrcode text-soft-purple ml-1"></i> معرّف النظارة (Glasses ID)</label>
+                    <input type="text" id="glassesIdInput" value="HL-9024" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
-                <button onclick="login()" class="w-full py-3.5 bg-gradient-to-r from-brand-purple to-brand-blue hover:opacity-95 text-white font-bold rounded-xl shadow-lg glow-blue transition-all transform active:scale-95 mt-4">
+                <button onclick="login()" class="w-full py-3.5 soft-button-purple text-white font-bold rounded-2xl shadow-md transition-all transform active:scale-95 mt-4 text-sm">
                     تأكيد وتسجيل الدخول <i class="fa-solid fa-arrow-left mr-2"></i>
                 </button>
             </div>
 
-            <!-- Footer info -->
-            <div class="text-center text-[10px] text-gray-500">
-                مرتبط بسحابة Supabase & Firebase OTP • إصدار 1.0.0[span_1](start_span)[span_1](end_span)
+            <div class="text-center text-[10px] text-soft-textMuted font-medium">
+                Supabase & Firebase Cloud Sync • HydroLens v2.0[span_10](start_span)[span_10](end_span)
             </div>
         </div>
 
         <!-- VIEW 2: MAIN DASHBOARD SCREEN -->
-        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto transition-all duration-300 space-y-4">
+        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-4">
             
-            <!-- Header section -->
+            <!-- User Header -->
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-brand-purple to-brand-blue p-0.5">
-                        <div class="w-full h-full bg-brand-darkBg rounded-full flex items-center justify-center">
-                            <i class="fa-solid fa-user-astronaut text-brand-purple"></i>
-                        </div>
+                    <div class="w-10 h-10 rounded-2xl bg-soft-purpleLight flex items-center justify-center text-soft-purple border border-soft-purple/20">
+                        <i class="fa-solid fa-user-astronaut text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-white">مرحباً بكِ 👋</h2>
-                        <p class="text-[10px] text-gray-400" id="userEmailDisplay">student@HydroLens.edu.sa</p>
+                        <h2 class="text-xs font-extrabold text-soft-textDark">مرحباً بكِ 👋</h2>
+                        <p class="text-[10px] text-soft-textMuted font-medium" id="userEmailDisplay">student@HydroLens.edu.sa</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white">
+                <button onclick="logout()" class="w-8 h-8 rounded-xl bg-white border border-soft-purpleLight flex items-center justify-center text-soft-textMuted hover:text-soft-purple shadow-sm">
                     <i class="fa-solid fa-right-from-bracket text-xs"></i>
                 </button>
             </div>
 
-            <!-- Glasses Connected ID Badge -->
-            <div class="bg-gradient-to-r from-brand-purple/20 to-brand-blue/20 border border-brand-purple/30 rounded-2xl p-3 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></div>
-                    <span class="text-xs text-gray-300">النظارة النشطة: <strong id="activeGlassesId" class="text-brand-blue font-bold">HL-9024</strong></span>
+            <!-- Eye Health Score Feature (ميزة مؤشر راحة العين الذكي) -->
+            <div class="soft-card rounded-3xl p-4 flex items-center justify-between border-l-4 border-l-soft-purple">
+                <div>
+                    <span class="text-[10px] font-bold text-soft-textMuted block mb-0.5">مؤشر راحة العين اليومي</span>
+                    <div class="flex items-baseline gap-2">
+                        <span id="eyeScoreValue" class="text-2xl font-black text-soft-purple">94%</span>
+                        <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">ممتاز جداً</span>
+                    </div>
+                    <p class="text-[10px] text-soft-textMuted mt-1">توازن ممتاز بين الترطيب والإضاءة</p>
                 </div>
-                <span class="text-[10px] bg-brand-purple/30 text-brand-purple border border-brand-purple/40 px-2.5 py-1 rounded-full font-semibold">Hybrid Sync</span>
-            </div>
-
-            <!-- Saudi AI Avatar Status Card -->
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-purple/40 to-brand-blue/40 flex items-center justify-center text-2xl border border-brand-purple/30">
-                    🇸🇦 👓
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-xs font-bold text-brand-purple mb-0.5">المساعد الذكي (الهوية الوطنية)</h3>
-                    <p id="aiAdvisorText" class="text-[11px] text-gray-300 leading-relaxed">عينك في حالة ممتازة حالياً! نسبة الرطوبة ممتازة والإضاءة مريحة جداً.</p>
+                <div class="w-12 h-12 rounded-2xl bg-soft-blueLight flex items-center justify-center text-soft-blue text-xl">
+                    <i class="fa-solid fa-eye"></i>
                 </div>
             </div>
 
-            <!-- Sensor Metrics Cards Grid -->
+            <!-- Metrics Grid -->
             <div class="grid grid-cols-2 gap-3">
-                <!-- Humidity Metric (TCRT5000 / DHT11) -->
-                <div class="bg-white/5 border border-brand-blue/20 rounded-2xl p-3.5 text-center relative overflow-hidden group">
-                    <div class="text-brand-blue text-xs font-semibold mb-1 flex items-center justify-center gap-1">
+                <!-- Humidity Metric -->
+                <div class="soft-card rounded-3xl p-3.5 text-center">
+                    <div class="text-soft-blue text-xs font-bold mb-1 flex items-center justify-center gap-1">
                         <i class="fa-solid fa-droplet"></i> رطوبة العين
                     </div>
-                    <div id="humidityValue" class="text-2xl font-extrabold text-white my-1">48%</div>
-                    <div id="humidityStatus" class="text-[10px] text-emerald-400 bg-emerald-500/10 py-0.5 px-2 rounded-full inline-block">مستوى طبيعي</div>
+                    <div id="humidityValue" class="text-2xl font-black text-soft-textDark my-1">52%</div>
+                    <div id="humidityStatus" class="text-[10px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full inline-block font-bold">مستوى متوازن</div>
                 </div>
 
-                <!-- Ambient Light Metric (BH1750 Lux Sensor) -->
-                <div class="bg-white/5 border border-brand-purple/20 rounded-2xl p-3.5 text-center relative overflow-hidden group">
-                    <div class="text-brand-purple text-xs font-semibold mb-1 flex items-center justify-center gap-1">
+                <!-- Light Metric -->
+                <div class="soft-card rounded-3xl p-3.5 text-center">
+                    <div class="text-soft-purple text-xs font-bold mb-1 flex items-center justify-center gap-1">
                         <i class="fa-solid fa-sun"></i> شدة الإضاءة
                     </div>
-                    <div id="luxValue" class="text-2xl font-extrabold text-white my-1">380 <span class="text-xs font-normal text-gray-400">Lux</span></div>
-                    <div id="luxStatus" class="text-[10px] text-brand-blue bg-brand-blue/10 py-0.5 px-2 rounded-full inline-block">إضاءة مريحة</div>
+                    <div id="luxValue" class="text-2xl font-black text-soft-textDark my-1">320 <span class="text-xs font-normal text-soft-textMuted">Lux</span></div>
+                    <div id="luxStatus" class="text-[10px] text-soft-purple bg-soft-purpleLight py-0.5 px-2 rounded-full inline-block font-bold">إضاءة مثالية</div>
                 </div>
             </div>
 
-            <!-- Action Section: Spray & Auto-Pilot -->
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+            <!-- Smart Blink Rate & Water Drink Reminder (ميزة معدل الرمش ومذكر الماء) -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-soft-purpleLight text-soft-purple flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-soft-textMuted font-bold block">معدل الرمش</span>
+                        <span class="text-xs font-black text-soft-textDark">16 / دقيقة</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-soft-blueLight text-soft-blue flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-glass-water"></i>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-soft-textMuted font-bold block">شرب الماء</span>
+                        <span class="text-xs font-black text-soft-textDark">1.8 لتر اليوم</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto-Pilot & Manual Mist Control -->
+            <div class="soft-card rounded-3xl p-4 space-y-3">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h4 class="text-xs font-bold text-white">الطيار الآلي (Auto-Pilot)</h4>
-                        <p class="text-[10px] text-gray-400">ضخ الرذاذ تلقائياً عند اكتشاف جفاف العين</p>
+                        <h4 class="text-xs font-bold text-soft-textDark">الترطيب التلقائي (Auto-Pilot)</h4>
+                        <p class="text-[10px] text-soft-textMuted">إطلاق الرذاذ الذكي فور اكتشاف إجهاد القرنية</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="autopilotToggle" checked onchange="toggleAutopilot()" class="sr-only peer">
-                        <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-purple"></div>
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-soft-purple"></div>
                     </label>
                 </div>
 
-                <button onclick="triggerManualSpray()" class="w-full py-3 bg-gradient-to-r from-brand-blue to-brand-purple hover:opacity-90 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg glow-purple transition-all active:scale-95">
+                <button onclick="triggerManualSpray()" class="w-full py-3 soft-button-blue text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
                     <i class="fa-solid fa-spray-can text-sm"></i> إرسال بخة ترطيب فورية (Manual Mist)
                 </button>
             </div>
 
-            <!-- Simulator for Testing Logic -->
-            <div class="bg-brand-purple/10 border border-brand-purple/20 rounded-2xl p-3">
-                <span class="text-[10px] text-brand-purple font-bold block mb-2 text-center"><i class="fa-solid fa-vial ml-1"></i> لوحة اختبار الحساسات (Live Sensor Simulator)</span>
+            <!-- Testing Simulator -->
+            <div class="bg-soft-purpleLight/50 border border-soft-purple/20 rounded-2xl p-3">
+                <span class="text-[10px] text-soft-purple font-bold block mb-2 text-center"><i class="fa-solid fa-vial ml-1"></i> تجربة المحاكاة التفاعلية الحية</span>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] rounded-lg text-gray-300">
-                        🟢 حالة بيئية طبيعية
+                    <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white hover:bg-gray-50 border border-soft-purpleLight text-[10px] font-bold rounded-xl text-soft-textDark shadow-sm">
+                        🟢 وضع متوازن ومريح
                     </button>
-                    <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-[10px] rounded-lg text-red-300">
-                        🔴 جفاف حاد بالعين
+                    <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] font-bold rounded-xl text-rose-600 shadow-sm">
+                        🔴 جفاف حاد وإضاءة قوية
                     </button>
                 </div>
             </div>
 
-            <!-- TEAM & GITHUB BRANCH INFO SECTION -->
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-3 text-[11px] space-y-2">
-                <div class="flex justify-between items-center text-xs font-bold text-brand-purple border-b border-white/10 pb-1.5">
-                    <span><i class="fa-solid fa-code-branch ml-1"></i> فريق العمل (GitHub Branches)[span_2](start_span)[span_2](end_span)</span>
-                    <span class="text-[10px] text-gray-400">Team of 2 Students</span>
+            <!-- Team GitHub Info -->
+            <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 text-[11px] space-y-1.5">
+                <div class="flex justify-between items-center text-xs font-bold text-soft-purple border-b border-soft-purpleLight pb-1">
+                    <span><i class="fa-solid fa-code-branch ml-1"></i> توثيق الفروع (GitHub Branches)[span_11](start_span)[span_11](end_span)</span>
+                    <span class="text-[10px] text-soft-textMuted">Team of 2</span>
                 </div>
-                <div class="flex justify-between items-center text-gray-300">
+                <div class="flex justify-between items-center text-soft-textMuted text-[10px]">
                     <span>• الطالبة 1 (Android & App UI)</span>
-                    <span class="font-mono text-[9px] bg-brand-purple/20 text-brand-purple px-2 py-0.5 rounded border border-brand-purple/30">branch-android-ui</span>
+                    <span class="font-mono bg-soft-purpleLight text-soft-purple px-2 py-0.5 rounded-md font-bold">branch-android-ui</span>
                 </div>
-                <div class="flex justify-between items-center text-gray-300">
+                <div class="flex justify-between items-center text-soft-textMuted text-[10px]">
                     <span>• الطالبة 2 (Web & Hosting)</span>
-                    <span class="font-mono text-[9px] bg-brand-blue/20 text-brand-blue px-2 py-0.5 rounded border border-brand-blue/30">branch-web-hosting</span>
+                    <span class="font-mono bg-soft-blueLight text-soft-blue px-2 py-0.5 rounded-md font-bold">branch-web-hosting</span>
                 </div>
             </div>
 
@@ -257,31 +262,20 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // State Variables
         let autopilotActive = true;
         let isSprayCooldown = false;
 
-        // Auto update current clock
         setInterval(() => {
             const now = new Date();
             const timeString = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
             document.getElementById('currentTime').innerText = timeString;
         }, 1000);
 
-        // Toast Helper
         function showToast(message, isError = false) {
             const toast = document.getElementById('toastNotification');
             const toastMsg = document.getElementById('toastMessage');
             toastMsg.innerText = message;
             
-            if (isError) {
-                toast.classList.remove('bg-emerald-500/90');
-                toast.classList.add('bg-rose-500/90');
-            } else {
-                toast.classList.remove('bg-rose-500/90');
-                toast.classList.add('bg-emerald-500/90');
-            }
-
             toast.classList.remove('-translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
 
@@ -294,109 +288,93 @@
             toast.classList.remove('translate-y-0', 'opacity-100');
         }
 
-        // Send OTP Simulation
         function sendOTP() {
             const email = document.getElementById('emailInput').value;
             if(!email) {
-                showToast('يرجى إدخال البريد الإلكتروني أولاً', true);
+                showToast('يرجى إدخال البريد الإلكتروني', true);
                 return;
             }
-            showToast('تم إرسال رمز الـ OTP إلى إيميلك (الرمز التجريبي: 123456)');
+            showToast('تم إرسال رمز OTP (استخدم 123456 للتجربة)');
         }
 
-        // Login Action
         function login() {
             const email = document.getElementById('emailInput').value;
             const otp = document.getElementById('otpInput').value;
-            const glassesId = document.getElementById('glassesIdInput').value;
 
-            if(!email || !glassesId) {
-                showToast('يرجى تعبئة كامل الحقول المطلوبة', true);
+            if(!email) {
+                showToast('يرجى تعبئة البريد الإلكتروني', true);
                 return;
             }
 
             if(otp !== "123456" && otp !== "") {
-                showToast('رمز OTP غير صحيح (استخدم 123456 للتجربة)', true);
+                showToast('رمز OTP غير صحيح (123456 للتجربة)', true);
                 return;
             }
 
-            // Set Data
             document.getElementById('userEmailDisplay').innerText = email;
-            document.getElementById('activeGlassesId').innerText = glassesId;
-
-            // Switch Screen
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
             document.getElementById('dashboardScreen').classList.add('flex');
 
-            showToast(`مرحباً بكِ! تم ربط النظارة ${glassesId} بنجاح ✨`);
+            showToast('مرحباً بكِ في HydroLens ✨');
         }
 
         function logout() {
             document.getElementById('dashboardScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('flex');
             document.getElementById('authScreen').classList.remove('hidden');
-            showToast('تم تسجيل الخروج بنجاح');
+            showToast('تم تسجيل الخروج');
         }
 
-        // Trigger Manual Water Mist
         function triggerManualSpray() {
             if(isSprayCooldown) {
-                showToast('الرجاء الانتظار قليلاً قبل إطلاق بخة جديدة', true);
+                showToast('الرجاء الانتظار ثوانٍ معدودة', true);
                 return;
             }
 
             isSprayCooldown = true;
-            showToast('💧 تم إرسال أمر تشغيل المضخة إلى النظارة عبر البلوتوث!');
+            showToast('💧 تم إرسال أمر بخة الترطيب للنظارة بنجاح!');
 
-            setTimeout(() => {
-                isSprayCooldown = false;
-            }, 3000);
+            setTimeout(() => { isSprayCooldown = false; }, 3000);
         }
 
-        // Toggle Autopilot
         function toggleAutopilot() {
             autopilotActive = document.getElementById('autopilotToggle').checked;
-            if(autopilotActive) {
-                showToast('تم تفعيل وضع الترطيب التلقائي الذكي');
-            } else {
-                showToast('تم إيقاف الوضع التلقائي (وضع يدوي فقط)', true);
-            }
+            showToast(autopilotActive ? 'تم تفعيل وضع الترطيب التلقائي' : 'تم إيقاف الترطيب التلقائي');
         }
 
-        // Simulation Matrix
         function simulateEnvironment(type) {
             const humidityVal = document.getElementById('humidityValue');
             const humidityStatus = document.getElementById('humidityStatus');
             const luxVal = document.getElementById('luxValue');
             const luxStatus = document.getElementById('luxStatus');
-            const aiText = document.getElementById('aiAdvisorText');
+            const eyeScore = document.getElementById('eyeScoreValue');
 
             if(type === 'dry') {
-                humidityVal.innerText = '18%';
+                humidityVal.innerText = '16%';
                 humidityStatus.innerText = 'تحذير: جفاف حاد!';
-                humidityStatus.className = 'text-[10px] text-rose-400 bg-rose-500/10 py-0.5 px-2 rounded-full inline-block font-bold animate-pulse';
+                humidityStatus.className = 'text-[10px] text-rose-600 bg-rose-50 py-0.5 px-2 rounded-full font-bold animate-pulse';
 
-                luxVal.innerHTML = '890 <span class="text-xs font-normal text-gray-400">Lux</span>';
-                luxStatus.innerText = 'إضاءة مجهدة جداً';
-                luxStatus.className = 'text-[10px] text-amber-400 bg-amber-500/10 py-0.5 px-2 rounded-full inline-block font-bold';
+                luxVal.innerHTML = '850 <span class="text-xs font-normal text-soft-textMuted">Lux</span>';
+                luxStatus.innerText = 'إضاءة مجهدة';
+                luxStatus.className = 'text-[10px] text-amber-600 bg-amber-50 py-0.5 px-2 rounded-full font-bold';
 
-                aiText.innerText = 'تنبيه: تم رصد جفاف متزايد بالعين تحت إضاءة عالية! تم إطلاق بخة ترطيب تلقائية للحماية.';
+                eyeScore.innerText = '58%';
 
                 if(autopilotActive) {
                     triggerManualSpray();
                 }
             } else {
-                humidityVal.innerText = '48%';
-                humidityStatus.innerText = 'مستوى طبيعي';
-                humidityStatus.className = 'text-[10px] text-emerald-400 bg-emerald-500/10 py-0.5 px-2 rounded-full inline-block';
+                humidityVal.innerText = '52%';
+                humidityStatus.innerText = 'مستوى متوازن';
+                humidityStatus.className = 'text-[10px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full font-bold';
 
-                luxVal.innerHTML = '380 <span class="text-xs font-normal text-gray-400">Lux</span>';
-                luxStatus.innerText = 'إضاءة مريحة';
-                luxStatus.className = 'text-[10px] text-brand-blue bg-brand-blue/10 py-0.5 px-2 rounded-full inline-block';
+                luxVal.innerHTML = '320 <span class="text-xs font-normal text-soft-textMuted">Lux</span>';
+                luxStatus.innerText = 'إضاءة مثالية';
+                luxStatus.className = 'text-[10px] text-soft-purple bg-soft-purpleLight py-0.5 px-2 rounded-full font-bold';
 
-                aiText.innerText = 'عينك في حالة ممتازة حالياً! نسبة الرطوبة ممتازة والإضاءة مريحة جداً.';
-                showToast('تمت إعادة ضبط المستشعرات للوضع الطبيعي');
+                eyeScore.innerText = '94%';
+                showToast('عادت المستشعرات للحالة الطبيعية المريحة');
             }
         }
     </script>
