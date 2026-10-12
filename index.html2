@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrolens - نظارة ترطيب العين الذكية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hydrolens: {
+                            bg: '#FAF8F5',
+                            card: '#FFFFFF',
+                            purple: '#8B78E6',
+                            teal: '#52B3C8',
+                            dark: '#182433',
+                            muted: '#717D96',
+                            lightBg: '#F0F7FA'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FAF8F5;
+            background-image: radial-gradient(circle at top right, rgba(139, 120, 230, 0.1), transparent 50%),
+                              radial-gradient(circle at bottom left, rgba(82, 179, 200, 0.1), transparent 50%);
+            min-height: 100vh;
+            color: #182433;
+        }
+
+        .hydrolens-card {
+            background: #FFFFFF;
+            box-shadow: 0 10px 30px rgba(139, 120, 230, 0.07);
+            border: 1px solid rgba(139, 120, 230, 0.15);
+        }
+
+        .hydrolens-gradient-btn {
+            background: linear-gradient(135deg, #8B78E6 0%, #52B3C8 100%);
+            box-shadow: 0 6px 20px rgba(82, 179, 200, 0.25);
+        }
+        
+        .logo-h-shape {
+            background: linear-gradient(135deg, #8B78E6 0%, #52B3C8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 md:p-4">
+
+    <!-- Mobile Screen Frame Container -->
+    <div class="w-full max-w-md h-screen md:h-[840px] bg-hydrolens-bg md:rounded-[40px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-hydrolens-purple/20">
+        
+        <!-- Toast Notification -->
+        <div id="toastNotification" class="absolute top-4 left-4 right-4 bg-hydrolens-dark text-white text-xs px-4 py-3 rounded-2xl flex items-center justify-between shadow-xl transition-all duration-300 transform -translate-y-20 opacity-0 z-50">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-hydrolens-teal text-sm"></i>
+                <span id="toastMessage">تمت العملية بنجاح!</span>
+            </div>
+            <button onclick="hideToast()" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- VIEW 1: AUTHENTICATION & LOGIN SCREEN -->
+        <div id="authScreen" class="flex-1 flex flex-col justify-between p-6 z-10 transition-all duration-300">
+            <div class="text-center my-auto pt-6">
+                <!-- Logo Inspired by Design #10 (Hydrolens Signature - Letter H with mist) -->
+                <div class="w-24 h-24 mx-auto mb-4 rounded-3xl bg-hydrolens-lightBg flex items-center justify-center border border-hydrolens-teal/30 shadow-inner relative overflow-hidden">
+                    <span class="text-5xl font-black logo-h-shape">H</span>
+                    <div class="absolute top-3 right-3 w-2 h-2 rounded-full bg-hydrolens-teal animate-ping"></div>
+                    <div class="absolute top-5 right-5 w-1.5 h-1.5 rounded-full bg-hydrolens-purple"></div>
+                </div>
+                <h1 class="text-3xl font-extrabold text-hydrolens-dark mb-1 tracking-wide">Hydrolens</h1>
+                <p class="text-xs text-hydrolens-muted font-medium">نظام العناية الذكية وترطيب العين[span_2](start_span)[span_2](end_span)</p>
+            </div>
+
+            <!-- Auth Form -->
+            <div class="space-y-4 my-auto">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-hydrolens-dark pr-1"><i class="fa-solid fa-envelope text-hydrolens-purple ml-1"></i> البريد الإلكتروني الخاص بالمستخدم</label>
+                    <input type="email" id="emailInput" placeholder="name@example.com" class="w-full bg-white border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center pr-1">
+                        <label class="text-xs font-bold text-hydrolens-dark"><i class="fa-solid fa-key text-hydrolens-teal ml-1"></i> رمز التحقق (OTP)</label>
+                        <button onclick="sendOTPToEmail()" class="text-[11px] text-hydrolens-purple font-bold hover:underline">إرسال الرمز للإيميل <i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                    <input type="text" id="otpInput" placeholder="أدخل الرمز المُرسل لإيميلك" class="w-full bg-white border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-hydrolens-dark pr-1"><i class="fa-solid fa-qrcode text-hydrolens-purple ml-1"></i> معرّف النظارة الخاصة بك (Glasses ID)</label>
+                    <input type="text" id="glassesIdInput" placeholder="مثال: HL-9024" class="w-full bg-white border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
+                </div>
+
+                <button onclick="login()" class="w-full py-3.5 hydrolens-gradient-btn text-white font-bold rounded-2xl shadow-md transition-all transform active:scale-95 mt-4 text-sm">
+                    تأكيد وتسجيل الدخول <i class="fa-solid fa-arrow-left mr-2"></i>
+                </button>
+            </div>
+
+            <div class="text-center text-[10px] text-hydrolens-muted font-medium pb-2">
+                Hydrolens Signature Edition • IoT Cloud
+            </div>
+        </div>
+
+        <!-- VIEW 2: MAIN DASHBOARD SCREEN -->
+        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-3">
+            
+            <!-- User Header -->
+            <div class="flex justify-between items-center pt-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-hydrolens-lightBg flex items-center justify-center text-hydrolens-purple border border-hydrolens-teal/20">
+                        <i class="fa-solid fa-user-astronaut text-base"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-extrabold text-hydrolens-dark">مرحباً بكِ 👋</h2>
+                        <p class="text-[10px] text-hydrolens-muted font-medium" id="userEmailDisplay">user@example.com</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="w-8 h-8 rounded-xl bg-white border border-hydrolens-purple/20 flex items-center justify-center text-hydrolens-muted hover:text-hydrolens-purple shadow-sm">
+                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Glasses Connection Badge -->
+            <div class="bg-white border border-hydrolens-purple/20 rounded-2xl p-3 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-glasses"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-hydrolens-dark block">النظارة المرتبطة حالياً</span>
+                        <span class="text-[9px] text-emerald-600 font-semibold" id="activeGlassesBadge">HL-9024 (متصل عبر BLE)</span>
+                    </div>
+                </div>
+                <span class="text-[9px] bg-emerald-50 text-emerald-600 font-bold px-2.5 py-1 rounded-xl">نشط</span>
+            </div>
+
+            <!-- Eye Health Score Feature -->
+            <div class="hydrolens-card rounded-3xl p-3.5 flex items-center justify-between border-l-4 border-l-hydrolens-purple">
+                <div>
+                    <span class="text-[10px] font-bold text-hydrolens-muted block mb-0.5">مؤشر راحة العين (بواسطة النظارة)</span>
+                    <div class="flex items-baseline gap-2">
+                        <span id="eyeScoreValue" class="text-xl font-black text-hydrolens-purple">--%</span>
+                        <span id="eyeScoreStatus" class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full">يرجى ارتداء النظارة...</span>
+                    </div>
+                    <p class="text-[10px] text-hydrolens-muted mt-0.5">في انتظار مزامنة الحساسات الحية</p>
+                </div>
+                <div class="w-11 h-11 rounded-2xl bg-hydrolens-lightBg flex items-center justify-center text-hydrolens-teal text-lg">
+                    <i class="fa-solid fa-eye animate-pulse"></i>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-2 gap-2.5">
+                <div class="hydrolens-card rounded-3xl p-3 text-center">
+                    <div class="text-hydrolens-teal text-xs font-bold mb-1 flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-droplet"></i> رطوبة العين
+                    </div>
+                    <div id="humidityValue" class="text-xl font-black text-hydrolens-dark my-0.5">--%</div>
+                    <div id="humidityStatus" class="text-[10px] text-gray-400 bg-gray-50 py-0.5 px-2 rounded-full inline-block font-bold">جاري القراءة...</div>
+                </div>
+
+                <div class="hydrolens-card rounded-3xl p-3 text-center">
+                    <div class="text-hydrolens-purple text-xs font-bold mb-1 flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-sun"></i> شدة الإضاءة
+                    </div>
+                    <div id="luxValue" class="text-xl font-black text-hydrolens-dark my-0.5">-- <span class="text-xs font-normal text-hydrolens-muted">Lux</span></div>
+                    <div id="luxStatus" class="text-[10px] text-gray-400 bg-gray-50 py-0.5 px-2 rounded-full inline-block font-bold">جاري القراءة...</div>
+                </div>
+            </div>
+
+            <!-- Auto-Pilot & Manual Mist Control -->
+            <div class="hydrolens-card rounded-3xl p-3.5 space-y-2.5">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-hydrolens-dark">الترطيب التلقائي (Auto-Pilot)</h4>
+                        <p class="text-[9px] text-hydrolens-muted">تفعيل البخاخ فوراً عند هبوط الرطوبة</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="autopilotToggle" checked onchange="toggleAutopilot()" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-hydrolens-purple"></div>
+                    </label>
+                </div>
+
+                <button onclick="triggerManualSpray()" class="w-full py-2.5 hydrolens-gradient-btn text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
+                    <i class="fa-solid fa-spray-can text-sm"></i> إرسال أمر بخة ترطيب للنظارة
+                </button>
+            </div>
+
+            <!-- Testing Simulator for Presentation -->
+            <div class="bg-hydrolens-lightBg border border-hydrolens-teal/20 rounded-2xl p-2.5">
+                <span class="text-[10px] text-hydrolens-purple font-bold block mb-1.5 text-center"><i class="fa-solid fa-vial ml-1"></i> محاكاة قراءات النظارة (لجنة التقييم)</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white hover:bg-gray-50 border border-hydrolens-purple/20 text-[10px] font-bold rounded-xl text-hydrolens-dark shadow-sm">
+                        🟢 قراءة طبيعية مريحة
+                    </button>
+                    <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] font-bold rounded-xl text-rose-600 shadow-sm">
+                        🔴 رصد جفاف بالعين
+                    </button>
+                </div>
+            </div>
+
+            <!-- Support & Troubleshooting Feature -->
+            <div class="bg-white border border-hydrolens-purple/20 rounded-2xl p-3 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-hydrolens-dark block">الدعم الفني وإصلاح الأعطال</span>
+                        <span class="text-[9px] text-hydrolens-muted">فحص المضخة والبطارية</span>
+                    </div>
+                </div>
+                <button onclick="showTroubleshooting()" class="text-[10px] bg-hydrolens-dark text-white font-bold px-3 py-1.5 rounded-xl">دعم</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Troubleshooting Modal -->
+    <div id="troubleshootModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl border border-hydrolens-purple/20">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-xs font-bold text-hydrolens-dark"><i class="fa-solid fa-wrench text-hydrolens-purple ml-1"></i> مركز استكشاف الأخطاء</h3>
+                <button onclick="closeTroubleshooting()" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div class="space-y-2 text-[11px] text-hydrolens-muted">
+                <p>• <strong>توقف بخاخ الرذاذ:</strong> تأكد من امتلاء خزان الماء الصغير في إطار النظارة وتوصيل الطاقة.</p>
+                <p>• <strong>مشكلة البلوتوث:</strong> أعد تشغيل البلوتوث في هاتفك واقترب من النظارة (المسافة < 2 متر).</p>
+            </div>
+            <button onclick="closeTroubleshooting()" class="w-full py-2.5 hydrolens-gradient-btn text-white text-xs font-bold rounded-xl shadow-sm">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let generatedOTP = "";
+        let autopilotActive = true;
+        let isSprayCooldown = false;
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('-translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(hideToast, 4000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toastNotification');
+            toast.classList.add('-translate-y-20', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+
+        function sendOTPToEmail() {
+            const email = document.getElementById('emailInput').value;
+            const glassesId = document.getElementById('glassesIdInput').value || "HL-9024";
+            
+            if(!email || !email.includes('@')) {
+                showToast('يرجى كتابة بريد إلكتروني صحيح أولاً');
+                return;
+            }
+
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            showToast(`📨 تم إرسال رسالة إلى (${email}): الرمز هو [ ${generatedOTP} ] للنظارة [ ${glassesId} ]`);
+        }
+
+        function login() {
+            const email = document.getElementById('emailInput').value;
+            const otp = document.getElementById('otpInput').value;
+            const glassesId = document.getElementById('glassesIdInput').value;
+
+            if(!email || !otp || !glassesId) {
+                showToast('يرجى إدخال البريد الإلكتروني ورمز التحقق ومعرّف النظارة');
+                return;
+            }
+
+            if(generatedOTP && otp !== generatedOTP) {
+                showToast('رمز التحقق غير صحيح، تأكد من الرمز المُرسل لإيميلك');
+                return;
+            }
+
+            document.getElementById('userEmailDisplay').innerText = email;
+            document.getElementById('activeGlassesBadge').innerText = `${glassesId} (متصل بالبلوتوث)`;
+
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            document.getElementById('dashboardScreen').classList.add('flex');
+
+            showToast(`مرحباً بكِ في Hydrolens! تم ربط النظارة ${glassesId} بنجاح ✨`);
+            setTimeout(() => { simulateEnvironment('normal'); }, 1000);
+        }
+
+        function logout() {
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('flex');
+            document.getElementById('authScreen').classList.remove('hidden');
+            showToast('تم تسجيل الخروج بنجاح');
+        }
+
+        function triggerManualSpray() {
+            if(isSprayCooldown) {
+                showToast('الرجاء الانتظار ثوانٍ معدودة قبل بخة جديدة');
+                return;
+            }
+
+            isSprayCooldown = true;
+            showToast('💧 تم إرسال أمر تشغيل مضخة الرذاذ إلى النظارة بنجاح!');
+            setTimeout(() => { isSprayCooldown = false; }, 3000);
+        }
+
+        function toggleAutopilot() {
+            autopilotActive = document.getElementById('autopilotToggle').checked;
+            showToast(autopilotActive ? 'تم تفعيل الترطيب التلقائي الذكي' : 'تم إيقاف الترطيب التلقائي');
+        }
+
+        function showTroubleshooting() {
+            document.getElementById('troubleshootModal').classList.remove('hidden');
+            document.getElementById('troubleshootModal').classList.add('flex');
+        }
+
+        function closeTroubleshooting() {
+            document.getElementById('troubleshootModal').classList.remove('flex');
+            document.getElementById('troubleshootModal').classList.add('hidden');
+        }
+
+        function simulateEnvironment(type) {
+            const humidityVal = document.getElementById('humidityValue');
+            const humidityStatus = document.getElementById('humidityStatus');
+            const luxVal = document.getElementById('luxValue');
+            const luxStatus = document.getElementById('luxStatus');
+            const eyeScore = document.getElementById('eyeScoreValue');
+            const eyeScoreStatus = document.getElementById('eyeScoreStatus');
+
+            if(type === 'dry') {
+                humidityVal.innerText = '15%';
+                humidityStatus.innerText = 'تحذير: جفاف حاد!';
+                humidityStatus.className = 'text-[10px] text-rose-600 bg-rose-50 py-0.5 px-2 rounded-full font-bold animate-pulse';
+
+                luxVal.innerHTML = '900 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
+                luxStatus.innerText = 'إضاءة عالية مجهدة';
+                luxStatus.className = 'text-[10px] text-amber-600 bg-amber-50 py-0.5 px-2 rounded-full font-bold';
+
+                eyeScore.innerText = '52%';
+                eyeScoreStatus.innerText = 'إجهاد جفاف القرنية';
+                eyeScoreStatus.className = 'text-[10px] text-rose-600 font-bold bg-rose-50 py-0.5 px-2 rounded-full';
+
+                if(autopilotActive) {
+                    triggerManualSpray();
+                }
+            } else {
+                humidityVal.innerText = '52%';
+                humidityStatus.innerText = 'مستوى متوازن';
+                humidityStatus.className = 'text-[10px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full font-bold';
+
+                luxVal.innerHTML = '320 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
+                luxStatus.innerText = 'إضاءة مثالية';
+                luxStatus.className = 'text-[10px] text-hydrolens-purple bg-hydrolens-lightBg py-0.5 px-2 rounded-full font-bold';
+
+                eyeScore.innerText = '94%';
+                eyeScoreStatus.innerText = 'ممتاز جداً';
+                eyeScoreStatus.className = 'text-[10px] text-emerald-600 font-bold bg-emerald-50 py-0.5 px-2 rounded-full';
+
+                showToast('تمت مزامنة قراءات المستشعرات بنجاح من النظارة الحية');
+            }
+        }
+    </script>
+</body>
+</html>
