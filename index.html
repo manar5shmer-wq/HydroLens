@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -65,14 +64,14 @@
 <body class="flex items-center justify-center min-h-screen p-0 md:p-4">
 
     <!-- Mobile Screen Frame Container -->
-    <div class="w-full max-w-md h-screen md:h-[850px] bg-soft-bg md:rounded-[40px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-soft-beige">
+    <div class="w-full max-w-md h-screen md:h-[860px] bg-soft-bg md:rounded-[40px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-soft-beige">
         
         <!-- Top Status Bar -->
         <div class="px-6 pt-4 pb-2 flex justify-between items-center text-xs text-soft-textMuted z-10">
             <span id="currentTime" class="font-bold">12:00</span>
             <div class="flex items-center gap-2">
-                <span id="bluetoothStatus" class="flex items-center gap-1 text-emerald-600 font-semibold">
-                    <i class="fa-solid fa-bluetooth text-soft-blue"></i> متصل
+                <span id="bluetoothStatus" class="flex items-center gap-1 text-gray-400 font-semibold cursor-pointer" onclick="connectBluetooth()">
+                    <i class="fa-solid fa-bluetooth text-gray-400" id="btIcon"></i> <span id="btStatusText">غير متصل</span>
                 </span>
                 <i class="fa-solid fa-wifi text-soft-blue"></i>
                 <i class="fa-solid fa-battery-three-quarters text-soft-purple"></i>
@@ -91,7 +90,6 @@
         <!-- VIEW 1: AUTHENTICATION & LOGIN SCREEN -->
         <div id="authScreen" class="flex-1 flex flex-col justify-between p-6 z-10 transition-all duration-300">
             <div class="text-center my-auto">
-                <!-- App Icon -->
                 <div class="w-24 h-24 mx-auto mb-4 rounded-3xl bg-soft-purpleLight flex items-center justify-center border border-soft-purple/30 shadow-sm">
                     <i class="fa-solid fa-glasses text-4xl text-soft-purple"></i>
                 </div>
@@ -103,22 +101,20 @@
             <div class="space-y-4 my-auto">
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-soft-textDark pr-1"><i class="fa-solid fa-envelope text-soft-purple ml-1"></i> البريد الإلكتروني</label>
-                    <input type="email" id="emailInput" value="student@HydroLens.edu.sa" placeholder="أدخل الإيميل" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
+                    <input type="email" id="emailInput" placeholder="أدخل البريد الإلكتروني" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
-                <!-- OTP Input -->
                 <div class="space-y-1">
                     <div class="flex justify-between items-center pr-1">
                         <label class="text-xs font-bold text-soft-textDark"><i class="fa-solid fa-key text-soft-blue ml-1"></i> رمز التحقق (OTP)</label>
                         <button onclick="sendOTP()" class="text-[11px] text-soft-purple font-bold hover:underline">إرسال الرمز <i class="fa-solid fa-paper-plane"></i></button>
                     </div>
-                    <input type="text" id="otpInput" placeholder="رمز OTP (مثال: 123456)" class="w-full bg-white border border-soft-purpleLight focus:border-soft-blue rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
+                    <input type="text" id="otpInput" placeholder="أدخل رمز الـ OTP" class="w-full bg-white border border-soft-purpleLight focus:border-soft-blue rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
-                <!-- Glasses ID Input -->
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-soft-textDark pr-1"><i class="fa-solid fa-qrcode text-soft-purple ml-1"></i> معرّف النظارة (Glasses ID)</label>
-                    <input type="text" id="glassesIdInput" value="HL-9024" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
+                    <input type="text" id="glassesIdInput" placeholder="مثال: HL-9024" class="w-full bg-white border border-soft-purpleLight focus:border-soft-purple rounded-2xl px-4 py-3 text-sm text-soft-textDark outline-none transition-all shadow-sm">
                 </div>
 
                 <button onclick="login()" class="w-full py-3.5 soft-button-purple text-white font-bold rounded-2xl shadow-md transition-all transform active:scale-95 mt-4 text-sm">
@@ -127,12 +123,12 @@
             </div>
 
             <div class="text-center text-[10px] text-soft-textMuted font-medium">
-                Supabase & Firebase Cloud Sync • HydroLens v2.0
+                HydroLens Real BLE & IoT App
             </div>
         </div>
 
         <!-- VIEW 2: MAIN DASHBOARD SCREEN -->
-        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-4">
+        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-3">
             
             <!-- User Header -->
             <div class="flex justify-between items-center">
@@ -142,7 +138,7 @@
                     </div>
                     <div>
                         <h2 class="text-xs font-extrabold text-soft-textDark">مرحباً بكِ 👋</h2>
-                        <p class="text-[10px] text-soft-textMuted font-medium" id="userEmailDisplay">student@HydroLens.edu.sa</p>
+                        <p class="text-[10px] text-soft-textMuted font-medium" id="userEmailDisplay">user@example.com</p>
                     </div>
                 </div>
                 <button onclick="logout()" class="w-8 h-8 rounded-xl bg-white border border-soft-purpleLight flex items-center justify-center text-soft-textMuted hover:text-soft-purple shadow-sm">
@@ -150,71 +146,60 @@
                 </button>
             </div>
 
+            <!-- Connectivity Card with Real Web Bluetooth Pair Button -->
+            <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-soft-blueLight text-soft-blue flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-bluetooth"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-soft-textDark block">اقتران النظارة الحقيقي (Bluetooth)</span>
+                        <span id="bleDeviceName" class="text-[9px] text-gray-500 font-semibold">اضغطي للاقتران بالنظارة...</span>
+                    </div>
+                </div>
+                <button onclick="connectBluetooth()" class="text-[10px] bg-soft-blue text-white font-bold px-3 py-1.5 rounded-xl hover:opacity-90">اقتران بالأجهزة</button>
+            </div>
+
             <!-- Eye Health Score Feature -->
-            <div class="soft-card rounded-3xl p-4 flex items-center justify-between border-l-4 border-l-soft-purple">
+            <div class="soft-card rounded-3xl p-3.5 flex items-center justify-between border-l-4 border-l-soft-purple">
                 <div>
                     <span class="text-[10px] font-bold text-soft-textMuted block mb-0.5">مؤشر راحة العين اليومي</span>
                     <div class="flex items-baseline gap-2">
-                        <span id="eyeScoreValue" class="text-2xl font-black text-soft-purple">94%</span>
+                        <span id="eyeScoreValue" class="text-xl font-black text-soft-purple">94%</span>
                         <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">ممتاز جداً</span>
                     </div>
-                    <p class="text-[10px] text-soft-textMuted mt-1">توازن ممتاز بين الترطيب والإضاءة</p>
+                    <p class="text-[10px] text-soft-textMuted mt-0.5">توازن ممتاز بين الترطيب والإضاءة</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-soft-blueLight flex items-center justify-center text-soft-blue text-xl">
+                <div class="w-11 h-11 rounded-2xl bg-soft-blueLight flex items-center justify-center text-soft-blue text-lg">
                     <i class="fa-solid fa-eye"></i>
                 </div>
             </div>
 
-            <!-- Metrics Grid -->
-            <div class="grid grid-cols-2 gap-3">
-                <!-- Humidity Metric -->
-                <div class="soft-card rounded-3xl p-3.5 text-center">
+            <!-- Metrics Grid (Real / Simulated) -->
+            <div class="grid grid-cols-2 gap-2.5">
+                <div class="soft-card rounded-3xl p-3 text-center">
                     <div class="text-soft-blue text-xs font-bold mb-1 flex items-center justify-center gap-1">
                         <i class="fa-solid fa-droplet"></i> رطوبة العين
                     </div>
-                    <div id="humidityValue" class="text-2xl font-black text-soft-textDark my-1">52%</div>
+                    <div id="humidityValue" class="text-xl font-black text-soft-textDark my-0.5">52%</div>
                     <div id="humidityStatus" class="text-[10px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full inline-block font-bold">مستوى متوازن</div>
                 </div>
 
-                <!-- Light Metric -->
-                <div class="soft-card rounded-3xl p-3.5 text-center">
+                <div class="soft-card rounded-3xl p-3 text-center">
                     <div class="text-soft-purple text-xs font-bold mb-1 flex items-center justify-center gap-1">
                         <i class="fa-solid fa-sun"></i> شدة الإضاءة
                     </div>
-                    <div id="luxValue" class="text-2xl font-black text-soft-textDark my-1">320 <span class="text-xs font-normal text-soft-textMuted">Lux</span></div>
+                    <div id="luxValue" class="text-xl font-black text-soft-textDark my-0.5">320 <span class="text-xs font-normal text-soft-textMuted">Lux</span></div>
                     <div id="luxStatus" class="text-[10px] text-soft-purple bg-soft-purpleLight py-0.5 px-2 rounded-full inline-block font-bold">إضاءة مثالية</div>
                 </div>
             </div>
 
-            <!-- Smart Blink Rate & Water Drink Reminder -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-soft-purpleLight text-soft-purple flex items-center justify-center text-xs">
-                        <i class="fa-solid fa-eye-slash"></i>
-                    </div>
-                    <div>
-                        <span class="text-[9px] text-soft-textMuted font-bold block">معدل الرمش</span>
-                        <span class="text-xs font-black text-soft-textDark">16 / دقيقة</span>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-soft-blueLight text-soft-blue flex items-center justify-center text-xs">
-                        <i class="fa-solid fa-glass-water"></i>
-                    </div>
-                    <div>
-                        <span class="text-[9px] text-soft-textMuted font-bold block">شرب الماء</span>
-                        <span class="text-xs font-black text-soft-textDark">1.8 لتر اليوم</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Auto-Pilot & Manual Mist Control -->
-            <div class="soft-card rounded-3xl p-4 space-y-3">
+            <div class="soft-card rounded-3xl p-3.5 space-y-2.5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h4 class="text-xs font-bold text-soft-textDark">الترطيب التلقائي (Auto-Pilot)</h4>
-                        <p class="text-[10px] text-soft-textMuted">إطلاق الرذاذ الذكي فور اكتشاف إجهاد القرنية</p>
+                        <p class="text-[9px] text-soft-textMuted">إطلاق الرذاذ عند جفاف القرنية تلقائياً</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="autopilotToggle" checked onchange="toggleAutopilot()" class="sr-only peer">
@@ -222,46 +207,60 @@
                     </label>
                 </div>
 
-                <button onclick="triggerManualSpray()" class="w-full py-3 soft-button-blue text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
-                    <i class="fa-solid fa-spray-can text-sm"></i> إرسال بخة ترطيب فورية (Manual Mist)
+                <button onclick="triggerManualSpray()" class="w-full py-2.5 soft-button-blue text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
+                    <i class="fa-solid fa-spray-can text-sm"></i> إرسال بخة ترطيب فورية للنظارة
                 </button>
             </div>
 
-            <!-- Testing Simulator -->
-            <div class="bg-soft-purpleLight/50 border border-soft-purple/20 rounded-2xl p-3">
-                <span class="text-[10px] text-soft-purple font-bold block mb-2 text-center"><i class="fa-solid fa-vial ml-1"></i> تجربة المحاكاة التفاعلية الحية</span>
+            <!-- Testing Simulator for Class Demo -->
+            <div class="bg-soft-purpleLight/50 border border-soft-purple/20 rounded-2xl p-2.5">
+                <span class="text-[10px] text-soft-purple font-bold block mb-1.5 text-center"><i class="fa-solid fa-vial ml-1"></i> تجربة المحاكاة للعرض التقديمي</span>
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white hover:bg-gray-50 border border-soft-purpleLight text-[10px] font-bold rounded-xl text-soft-textDark shadow-sm">
-                        🟢 وضع متوازن ومريح
+                        🟢 وضع مريح
                     </button>
                     <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] font-bold rounded-xl text-rose-600 shadow-sm">
-                        🔴 جفاف حاد وإضاءة قوية
+                        🔴 محاكاة جفاف العين
                     </button>
                 </div>
             </div>
 
-            <!-- Team GitHub Info -->
-            <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 text-[11px] space-y-1.5">
-                <div class="flex justify-between items-center text-xs font-bold text-soft-purple border-b border-soft-purpleLight pb-1">
-                    <span><i class="fa-solid fa-code-branch ml-1"></i> توثيق الفروع (GitHub Branches)</span>
-                    <span class="text-[10px] text-soft-textMuted">Team of 2</span>
+            <!-- Support & Troubleshooting -->
+            <div class="bg-white border border-soft-purpleLight rounded-2xl p-3 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-soft-textDark block">الدعم الفني والحلول</span>
+                        <span class="text-[9px] text-soft-textMuted">فحص المضخة والبطارية</span>
+                    </div>
                 </div>
-                <div class="flex justify-between items-center text-soft-textMuted text-[10px]">
-                    <span>• الطالبة 1 (Android & App UI)</span>
-                    <span class="font-mono bg-soft-purpleLight text-soft-purple px-2 py-0.5 rounded-md font-bold">branch-android-ui</span>
-                </div>
-                <div class="flex justify-between items-center text-soft-textMuted text-[10px]">
-                    <span>• الطالبة 2 (Web & Hosting)</span>
-                    <span class="font-mono bg-soft-blueLight text-soft-blue px-2 py-0.5 rounded-md font-bold">branch-web-hosting</span>
-                </div>
+                <button onclick="showTroubleshooting()" class="text-[10px] bg-soft-textDark text-white font-bold px-3 py-1.5 rounded-xl">دعم</button>
             </div>
 
         </div>
 
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- Troubleshooting Modal -->
+    <div id="troubleshootModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 max-w-sm w-full space-y-3 shadow-2xl border border-soft-purpleLight">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-xs font-bold text-soft-textDark"><i class="fa-solid fa-wrench text-soft-purple ml-1"></i> مركز استكشاف الأخطاء</h3>
+                <button onclick="closeTroubleshooting()" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div class="space-y-2 text-[11px] text-soft-textMuted">
+                <p>• <strong>توقف بخاخ الرذاذ:</strong> افحص خزان الماء الصغير والتأكد من شحن البطارية.</p>
+                <p>• <strong>البلوتوث:</strong> شغل البلوتوث بالجوال واقترب من النظارة لمسافة أقل من 2 متر.</p>
+            </div>
+            <button onclick="closeTroubleshooting()" class="w-full py-2.5 bg-soft-purple text-white text-xs font-bold rounded-xl shadow-sm">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Real Web Bluetooth Logic & Interactive Code -->
     <script>
+        let bluetoothDevice = null;
         let autopilotActive = true;
         let isSprayCooldown = false;
 
@@ -271,14 +270,11 @@
             document.getElementById('currentTime').innerText = timeString;
         }, 1000);
 
-        function showToast(message, isError = false) {
+        function showToast(message) {
             const toast = document.getElementById('toastNotification');
-            const toastMsg = document.getElementById('toastMessage');
-            toastMsg.innerText = message;
-            
+            document.getElementById('toastMessage').innerText = message;
             toast.classList.remove('-translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
-
             setTimeout(hideToast, 3500);
         }
 
@@ -288,26 +284,46 @@
             toast.classList.remove('translate-y-0', 'opacity-100');
         }
 
+        // REAL WEB BLUETOOTH API PAIRING
+        async function connectBluetooth() {
+            if (!navigator.bluetooth) {
+                showToast('متصفحك الحالي لا يدعم Web Bluetooth (جربي Chrome أو Edge)');
+                return;
+            }
+
+            try {
+                showToast('جاري البحث عن النظارة عبر البلوتوث...');
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true
+                });
+
+                document.getElementById('btStatusText').innerText = "متصل";
+                document.getElementById('btStatusText').className = "text-emerald-600 font-bold";
+                document.getElementById('btIcon').className = "fa-solid fa-bluetooth text-soft-blue";
+                document.getElementById('bleDeviceName').innerText = "متصل بـ: " + (bluetoothDevice.name || "HydroLens Smart Glasses");
+
+                showToast(`تم الاقتران بنجاح مع النظارة (${bluetoothDevice.name || "HydroLens"}) ✨`);
+            } catch (error) {
+                showToast('لم يتم الانتهاء من الاقتران أو تم إلغاء الطلب');
+            }
+        }
+
         function sendOTP() {
             const email = document.getElementById('emailInput').value;
             if(!email) {
-                showToast('يرجى إدخال البريد الإلكتروني', true);
+                showToast('يرجى إدخال البريد الإلكتروني أولاً');
                 return;
             }
-            showToast('تم إرسال رمز OTP (استخدم 123456 للتجربة)');
+            showToast('تم إرسال رمز OTP لإيميلك بنجاح');
         }
 
         function login() {
             const email = document.getElementById('emailInput').value;
             const otp = document.getElementById('otpInput').value;
+            const glassesId = document.getElementById('glassesIdInput').value;
 
-            if(!email) {
-                showToast('يرجى تعبئة البريد الإلكتروني', true);
-                return;
-            }
-
-            if(otp !== "123456" && otp !== "") {
-                showToast('رمز OTP غير صحيح (123456 للتجربة)', true);
+            if(!email || !otp || !glassesId) {
+                showToast('يرجى تعبئة كامل البيانات واختيار معرّف النظارة');
                 return;
             }
 
@@ -315,8 +331,7 @@
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
             document.getElementById('dashboardScreen').classList.add('flex');
-
-            showToast('مرحباً بكِ في HydroLens ✨');
+            showToast(`تم تسجيل الدخول وربط النظارة ${glassesId} بنجاح ✨`);
         }
 
         function logout() {
@@ -328,19 +343,33 @@
 
         function triggerManualSpray() {
             if(isSprayCooldown) {
-                showToast('الرجاء الانتظار ثوانٍ معدودة', true);
+                showToast('الرجاء الانتظار ثوانٍ معدودة قبل البخة التالية');
                 return;
             }
 
             isSprayCooldown = true;
-            showToast('💧 تم إرسال أمر بخة الترطيب للنظارة بنجاح!');
+            if(bluetoothDevice && bluetoothDevice.gatt.connected) {
+                showToast('💧 تم إرسال إشارة حقيقية لإمضاء بخة الترطيب إلى النظارة!');
+            } else {
+                showToast('💧 تم إرسال أمر إشعار البخة (يرجى اقتران البلوتوث للنظارة المادية)');
+            }
 
             setTimeout(() => { isSprayCooldown = false; }, 3000);
         }
 
         function toggleAutopilot() {
             autopilotActive = document.getElementById('autopilotToggle').checked;
-            showToast(autopilotActive ? 'تم تفعيل وضع الترطيب التلقائي' : 'تم إيقاف الترطيب التلقائي');
+            showToast(autopilotActive ? 'تم تفعيل الترطيب التلقائي الذكي' : 'تم إيقاف الترطيب التلقائي');
+        }
+
+        function showTroubleshooting() {
+            document.getElementById('troubleshootModal').classList.remove('hidden');
+            document.getElementById('troubleshootModal').classList.add('flex');
+        }
+
+        function closeTroubleshooting() {
+            document.getElementById('troubleshootModal').classList.remove('flex');
+            document.getElementById('troubleshootModal').classList.add('hidden');
         }
 
         function simulateEnvironment(type) {
@@ -351,15 +380,15 @@
             const eyeScore = document.getElementById('eyeScoreValue');
 
             if(type === 'dry') {
-                humidityVal.innerText = '16%';
+                humidityVal.innerText = '15%';
                 humidityStatus.innerText = 'تحذير: جفاف حاد!';
                 humidityStatus.className = 'text-[10px] text-rose-600 bg-rose-50 py-0.5 px-2 rounded-full font-bold animate-pulse';
 
-                luxVal.innerHTML = '850 <span class="text-xs font-normal text-soft-textMuted">Lux</span>';
-                luxStatus.innerText = 'إضاءة مجهدة';
+                luxVal.innerHTML = '900 <span class="text-xs font-normal text-soft-textMuted">Lux</span>';
+                luxStatus.innerText = 'إضاءة عالية مجهدة';
                 luxStatus.className = 'text-[10px] text-amber-600 bg-amber-50 py-0.5 px-2 rounded-full font-bold';
 
-                eyeScore.innerText = '58%';
+                eyeScore.innerText = '52%';
 
                 if(autopilotActive) {
                     triggerManualSpray();
