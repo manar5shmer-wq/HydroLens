@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydrolens - AI Smart Eye Hydration</title>
+    <title>Hydrolens - AI Neural Eye Hydration System</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -17,13 +17,14 @@
                 extend: {
                     colors: {
                         hydrolens: {
-                            bg: '#FAF8F5',
+                            bg: '#F6F4EE',
                             purple: '#8B78E6',
-                            purpleSoft: '#ECE9FA',
+                            purpleDark: '#6A56C4',
                             teal: '#52B3C8',
-                            tealSoft: '#E6F6F9',
-                            dark: '#161F2B',
-                            muted: '#68778D',
+                            tealDark: '#3A92A4',
+                            dark: '#0F1722',
+                            muted: '#6B7A90',
+                            cardBg: 'rgba(255, 255, 255, 0.85)'
                         }
                     },
                     fontFamily: {
@@ -36,165 +37,185 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #FAF8F5;
-            background-image: radial-gradient(circle at 10% 10%, rgba(139, 120, 230, 0.12), transparent 40%),
-                              radial-gradient(circle at 90% 90%, rgba(82, 179, 200, 0.12), transparent 40%);
+            background-color: #F6F4EE;
+            background-image: radial-gradient(circle at 15% 15%, rgba(139, 120, 230, 0.12), transparent 45%),
+                              radial-gradient(circle at 85% 85%, rgba(82, 179, 200, 0.12), transparent 45%);
             min-height: 100vh;
-            color: #161F2B;
+            color: #0F1722;
         }
 
-        .ai-glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(139, 120, 230, 0.2);
-            box-shadow: 0 20px 40px rgba(139, 120, 230, 0.08);
+            box-shadow: 0 25px 50px rgba(139, 120, 230, 0.08);
         }
 
         .ai-gradient-btn {
             background: linear-gradient(135deg, #8B78E6 0%, #52B3C8 100%);
-            box-shadow: 0 8px 25px rgba(82, 179, 200, 0.3);
+            box-shadow: 0 10px 30px rgba(82, 179, 200, 0.35);
+            transition: all 0.3s ease;
+        }
+        .ai-gradient-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(82, 179, 200, 0.45);
         }
 
-        .logo-h-gradient {
+        .logo-gradient-text {
             background: linear-gradient(135deg, #8B78E6 0%, #52B3C8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .pulse-ring {
-            box-shadow: 0 0 0 0 rgba(82, 179, 200, 0.4);
-            animation: pulse-animation 2s infinite;
+        .ai-glow {
+            box-shadow: 0 0 30px rgba(139, 120, 230, 0.3);
         }
 
-        @keyframes pulse-animation {
-            0% { box-shadow: 0 0 0 0 rgba(82, 179, 200, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(82, 179, 200, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(82, 179, 200, 0); }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+        .scanner-beam::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #52B3C8, transparent);
+            animation: scanline 3s linear infinite;
         }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-0 md:p-4">
 
     <!-- Mobile Frame Container -->
-    <div class="w-full max-w-md h-screen md:h-[850px] bg-hydrolens-bg md:rounded-[42px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-hydrolens-purple/20">
+    <div class="w-full max-w-md h-screen md:h-[860px] bg-hydrolens-bg md:rounded-[44px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-hydrolens-purple/20">
         
-        <!-- Toast Notification Message -->
-        <div id="toastNotification" class="absolute top-5 left-4 right-4 bg-hydrolens-dark text-white text-xs px-4 py-3.5 rounded-2xl flex items-center justify-between shadow-2xl transition-all duration-300 transform -translate-y-24 opacity-0 z-50">
+        <!-- Toast Notification -->
+        <div id="toastNotification" class="absolute top-5 left-4 right-4 bg-hydrolens-dark text-white text-xs px-4 py-3.5 rounded-2xl flex items-center justify-between shadow-2xl transition-all duration-300 transform -translate-y-28 opacity-0 z-50 border border-hydrolens-teal/40">
             <div class="flex items-center gap-2.5">
-                <i id="toastIcon" class="fa-solid fa-circle-check text-hydrolens-teal text-base"></i>
-                <span id="toastMessage" class="font-medium leading-relaxed">تمت العملية بنجاح!</span>
+                <i id="toastIcon" class="fa-solid fa-brain text-hydrolens-teal text-base animate-pulse"></i>
+                <span id="toastMessage" class="font-medium leading-relaxed">جاري معالجة الذكاء الاصطناعي...</span>
             </div>
             <button onclick="hideToast()" class="text-white/60 hover:text-white mr-2"><i class="fa-solid fa-xmark text-sm"></i></button>
         </div>
 
-        <!-- SCREEN 1: STRICT AI AUTHENTICATION & PAIRING -->
-        <div id="authScreen" class="flex-1 flex flex-col justify-between p-6 z-10 overflow-y-auto">
-            <div class="text-center my-auto pt-4">
-                <!-- AI Hydrolens Signature Logo (#10) -->
-                <div class="w-24 h-24 mx-auto mb-3 rounded-3xl bg-white/80 border border-hydrolens-teal/30 flex items-center justify-center shadow-lg relative backdrop-blur-md">
-                    <span class="text-5xl font-black logo-h-gradient">H</span>
-                    <div class="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-hydrolens-teal pulse-ring"></div>
-                    <div class="absolute top-5 right-5 w-1.5 h-1.5 rounded-full bg-hydrolens-purple"></div>
+        <!-- SCREEN 1: ULTRA-SECURE AI LOGIN & PAIRING -->
+        <div id="authScreen" class="flex-1 flex flex-col justify-between p-7 z-10 overflow-y-auto">
+            
+            <!-- Branding Header -->
+            <div class="text-center pt-4 my-auto">
+                <div class="w-24 h-24 mx-auto mb-3 rounded-3xl bg-white border border-hydrolens-teal/30 flex items-center justify-center shadow-lg relative ai-glow">
+                    <span class="text-5xl font-black logo-gradient-text">H</span>
+                    <div class="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-hydrolens-teal animate-ping"></div>
+                    <div class="absolute top-6 right-6 w-1.5 h-1.5 rounded-full bg-hydrolens-purple"></div>
                 </div>
                 <h1 class="text-3xl font-black text-hydrolens-dark tracking-wide">Hydrolens</h1>
-                <p class="text-xs text-hydrolens-muted font-bold mt-1">نظام الترطيب الذكي بدعم الذكاء الاصطناعي</p>
+                <p class="text-xs text-hydrolens-muted font-bold mt-1">نظام العناية الذكية المزود بالذكاء الاصطناعي العصبي</p>
             </div>
 
-            <!-- Validation Auth Form -->
-            <div class="space-y-3.5 my-auto">
-                <div class="space-y-1">
+            <!-- Login Form -->
+            <div class="space-y-4 my-auto">
+                <div class="space-y-1.5">
                     <label class="text-xs font-bold text-hydrolens-dark pr-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-at text-hydrolens-purple"></i> البريد الإلكتروني الرسمي
+                        <i class="fa-solid fa-envelope text-hydrolens-purple"></i> البريد الإلكتروني الرسمي
                     </label>
-                    <input type="email" id="emailInput" placeholder="example@domain.com" class="w-full bg-white/90 border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
-                    <p id="emailError" class="text-[10px] text-rose-500 font-bold hidden pr-1">يرجى كتابة بريد إلكتروني صحيح (مثل: name@gmail.com)</p>
+                    <input type="email" id="emailInput" placeholder="name@domain.com" class="w-full bg-white border border-hydrolens-purple/25 focus:border-hydrolens-teal rounded-2xl px-4 py-3.5 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
+                    <p id="emailError" class="text-[10px] text-rose-500 font-bold hidden pr-1"><i class="fa-solid fa-circle-exclamation ml-1"></i> يرجى إدخال بريد إلكتروني صحيح</p>
                 </div>
 
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <div class="flex justify-between items-center pr-1">
                         <label class="text-xs font-bold text-hydrolens-dark flex items-center gap-1.5">
-                            <i class="fa-solid fa-shield-halved text-hydrolens-teal"></i> رمز التحقق (OTP)
+                            <i class="fa-solid fa-shield-halved text-hydrolens-teal"></i> رمز التحقق السري (OTP)
                         </label>
-                        <button type="button" onclick="sendStrictOTP()" class="text-[11px] text-hydrolens-purple font-extrabold hover:underline">إرسال الرمز للبريد <i class="fa-solid fa-paper-plane ml-0.5"></i></button>
+                        <button type="button" onclick="sendSecureOTP()" class="text-[11px] text-hydrolens-purple font-extrabold hover:underline">إرسال الرمز للإيميل <i class="fa-solid fa-paper-plane ml-0.5"></i></button>
                     </div>
-                    <input type="text" id="otpInput" maxlength="6" placeholder="أدخل كود الـ 6 أرقام" class="w-full bg-white/90 border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
-                    <p id="otpError" class="text-[10px] text-rose-500 font-bold hidden pr-1">رمز التحقق غير صحيح!</p>
+                    <!-- Hidden OTP Type Password -->
+                    <input type="password" id="otpInput" maxlength="6" placeholder="••••••" class="w-full bg-white border border-hydrolens-purple/25 focus:border-hydrolens-teal rounded-2xl px-4 py-3.5 text-sm text-hydrolens-dark outline-none transition-all shadow-sm tracking-widest font-bold">
+                    <p id="otpError" class="text-[10px] text-rose-500 font-bold hidden pr-1"><i class="fa-solid fa-circle-exclamation ml-1"></i> رمز التحقق غير صحيح أو لم يُرسل</p>
                 </div>
 
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <label class="text-xs font-bold text-hydrolens-dark pr-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-glasses text-hydrolens-purple"></i> معرّف النظارة (Glasses ID)
                     </label>
-                    <input type="text" id="glassesIdInput" placeholder="مثال: HL-9024" class="w-full bg-white/90 border border-hydrolens-purple/30 focus:border-hydrolens-teal rounded-2xl px-4 py-3 text-sm text-hydrolens-dark outline-none transition-all shadow-sm">
-                    <p id="glassesError" class="text-[10px] text-rose-500 font-bold hidden pr-1">يرجى إدخال معرّف النظارة المكون من حروف وأرقام</p>
+                    <input type="text" id="glassesIdInput" placeholder="مثال: HL-9024" class="w-full bg-white border border-hydrolens-purple/25 focus:border-hydrolens-teal rounded-2xl px-4 py-3.5 text-sm text-hydrolens-dark outline-none transition-all shadow-sm uppercase font-mono">
+                    <p id="glassesError" class="text-[10px] text-rose-500 font-bold hidden pr-1"><i class="fa-solid fa-circle-exclamation ml-1"></i> يرجى إدخال معرّف نظارة صحيح</p>
                 </div>
 
-                <button onclick="validateAndLogin()" class="w-full py-3.5 ai-gradient-btn text-white font-extrabold rounded-2xl shadow-lg transition-all transform active:scale-95 mt-3 text-sm flex items-center justify-center gap-2">
-                    <span>الربط والتحقق الذكي</span> <i class="fa-solid fa-arrow-left"></i>
+                <button onclick="verifyAndEnter()" class="w-full py-4 ai-gradient-btn text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 mt-2 shadow-lg">
+                    <span>تشغيل الذكاء الاصطناعي وربط النظارة</span> <i class="fa-solid fa-microchip"></i>
                 </button>
             </div>
 
             <div class="text-center text-[10px] text-hydrolens-muted font-bold pb-2">
-                Protected by AI Hydrolens Security Protocol
+                Neural Vision AI • Secure IoT Protocol v3.0
             </div>
         </div>
 
         <!-- SCREEN 2: INNOVATIVE AI DASHBOARD -->
         <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-3.5">
             
-            <!-- User Bar -->
-            <div class="flex justify-between items-center pt-1">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-2xl bg-hydrolens-purpleSoft flex items-center justify-center text-hydrolens-purple font-bold">
+            <!-- Header -->
+            <div class="flex justify-between items-center pt-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white border border-hydrolens-purple/20 flex items-center justify-center text-hydrolens-purple shadow-sm">
                         <i class="fa-solid fa-robot text-sm"></i>
                     </div>
                     <div>
-                        <h2 class="text-xs font-black text-hydrolens-dark">مرحباً بكِ 👋</h2>
-                        <p class="text-[10px] text-hydrolens-muted font-bold" id="userEmailDisplay">user@domain.com</p>
+                        <h2 class="text-xs font-black text-hydrolens-dark">مساعد الذكاء الاصطناعي نشط 🧠</h2>
+                        <p class="text-[10px] text-hydrolens-muted font-bold truncate max-w-[180px]" id="userEmailDisplay">user@domain.com</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-8 h-8 rounded-xl bg-white border border-hydrolens-purple/20 flex items-center justify-center text-hydrolens-muted hover:text-hydrolens-purple shadow-sm">
+                <button onclick="logout()" class="w-9 h-9 rounded-xl bg-white border border-hydrolens-purple/20 flex items-center justify-center text-hydrolens-muted hover:text-rose-500 shadow-sm transition-colors">
                     <i class="fa-solid fa-power-off text-xs"></i>
                 </button>
             </div>
 
-            <!-- Connected Glasses Info -->
-            <div class="bg-white/90 border border-hydrolens-purple/20 rounded-2xl p-2.5 flex justify-between items-center shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-[10px] font-extrabold text-hydrolens-dark" id="activeGlassesBadge">HL-9024 (اقتران نشط)</span>
+            <!-- AI Neural Status Banner -->
+            <div class="bg-gradient-to-r from-hydrolens-purple/10 to-hydrolens-teal/10 border border-hydrolens-teal/30 rounded-2xl p-3 flex justify-between items-center shadow-sm relative overflow-hidden scanner-beam">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-hydrolens-teal text-white flex items-center justify-center text-xs shadow-md">
+                        <i class="fa-solid fa-microchip animate-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-black text-hydrolens-dark block">خوارزمية الرؤية العصبية (Neural Core)</span>
+                        <span class="text-[9px] text-hydrolens-tealDark font-extrabold" id="activeGlassesBadge">HL-9024 (تحليل حي مستمر)</span>
+                    </div>
                 </div>
-                <span class="text-[9px] bg-hydrolens-tealSoft text-hydrolens-teal font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-wifi text-[8px] ml-1"></i> BLE Online</span>
+                <span class="text-[9px] bg-emerald-500 text-white font-black px-2.5 py-1 rounded-full shadow-sm">AI Active</span>
             </div>
 
-            <!-- AI Hydration Score Circle Card -->
-            <div class="ai-glass-card rounded-3xl p-4 flex items-center justify-between relative overflow-hidden">
-                <div class="space-y-1">
-                    <span class="text-[10px] font-extrabold text-hydrolens-muted block">مؤشر راحة العين الذكي (AI Score)</span>
+            <!-- Eye Health AI Score Card -->
+            <div class="glass-card rounded-3xl p-4 flex items-center justify-between border-l-4 border-l-hydrolens-purple relative overflow-hidden">
+                <div>
+                    <span class="text-[10px] font-extrabold text-hydrolens-muted block mb-0.5">مؤشر راحة العين الذكي (AI Health Index)</span>
                     <div class="flex items-baseline gap-2">
-                        <span id="eyeScoreValue" class="text-3xl font-black logo-h-gradient">--%</span>
-                        <span id="eyeScoreStatus" class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full">في انتظار الارتداء...</span>
+                        <span id="eyeScoreValue" class="text-3xl font-black logo-gradient-text">--%</span>
+                        <span id="eyeScoreStatus" class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full">بانتظار مزامنة العدسة...</span>
                     </div>
-                    <p class="text-[9px] text-hydrolens-muted font-bold pt-1"><i class="fa-solid fa-wand-magic-sparkles text-hydrolens-purple ml-1"></i> نظام الذكاء يتتبع حالة قرنية العين</p>
+                    <p class="text-[9px] text-hydrolens-muted font-bold mt-1">تحليل معدل الرمش وتوتر القرنية بواسطة الـ AI</p>
                 </div>
-                <div class="w-16 h-16 rounded-full border-4 border-hydrolens-purple/30 flex items-center justify-center text-hydrolens-purple text-xl shadow-inner relative">
+                <div class="w-14 h-14 rounded-2xl bg-white border border-hydrolens-teal/30 flex items-center justify-center text-hydrolens-teal text-2xl shadow-inner">
                     <i class="fa-solid fa-eye animate-pulse"></i>
                 </div>
             </div>
 
-            <!-- AI Smart Insights Card (ميزة الذكاء الاصطناعي الجديدة) -->
-            <div class="bg-gradient-to-r from-hydrolens-purpleSoft to-hydrolens-tealSoft rounded-2xl p-3 border border-hydrolens-purple/20 space-y-1">
-                <div class="flex items-center gap-1.5 text-hydrolens-purple font-extrabold text-xs">
-                    <i class="fa-solid fa-brain"></i> <span>مستشار الذكاء الاصطناعي (AI Insight)</span>
+            <!-- Deep AI Live Insights Box -->
+            <div class="bg-gradient-to-r from-white to-teal-50/50 rounded-2xl p-3.5 border border-hydrolens-teal/30 space-y-1.5 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 text-hydrolens-purple font-black text-xs">
+                        <i class="fa-solid fa-brain"></i> <span>تقرير التحليل العصبي الذكي</span>
+                    </div>
+                    <span class="text-[9px] bg-hydrolens-purple/10 text-hydrolens-purple font-bold px-2 py-0.5 rounded-md">Realtime AI</span>
                 </div>
                 <p id="aiInsightText" class="text-[10px] text-hydrolens-dark leading-relaxed font-bold">
-                    يرجى ارتداء النظارة ليقوم الذكاء الاصطناعي بتحليل جودة بيئة العين ومستوى الترطيب تلقائياً.
+                    النظارة متصلة بنجاح عبر بروتوكول البلوتوث الذكي. اضغط على أزرار محاكاة العرض أدناه لاختبار استجابة النظام الفورية.
                 </p>
             </div>
 
             <!-- Metrics Grid -->
             <div class="grid grid-cols-2 gap-2.5">
-                <div class="ai-glass-card rounded-2xl p-3 text-center">
+                <div class="glass-card rounded-2xl p-3.5 text-center">
                     <div class="text-hydrolens-teal text-xs font-bold mb-1 flex items-center justify-center gap-1">
                         <i class="fa-solid fa-droplet"></i> رطوبة القرنية
                     </div>
@@ -202,21 +223,21 @@
                     <div id="humidityStatus" class="text-[9px] text-gray-400 bg-gray-100 py-0.5 px-2 rounded-full inline-block font-bold">انتظار المزامنة</div>
                 </div>
 
-                <div class="ai-glass-card rounded-2xl p-3 text-center">
+                <div class="glass-card rounded-2xl p-3.5 text-center">
                     <div class="text-hydrolens-purple text-xs font-bold mb-1 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-sun"></i> شدة الإضاءة
+                        <i class="fa-solid fa-sun"></i> شدة الإضاءة المحيطة
                     </div>
                     <div id="luxValue" class="text-xl font-black text-hydrolens-dark my-0.5">-- <span class="text-xs font-normal text-hydrolens-muted">Lux</span></div>
                     <div id="luxStatus" class="text-[9px] text-gray-400 bg-gray-100 py-0.5 px-2 rounded-full inline-block font-bold">انتظار المزامنة</div>
                 </div>
             </div>
 
-            <!-- AI Auto-Mist Control -->
-            <div class="ai-glass-card rounded-2xl p-3.5 space-y-2.5">
+            <!-- Auto-Pilot & Manual Mist Control -->
+            <div class="glass-card rounded-2xl p-3.5 space-y-2.5">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h4 class="text-xs font-bold text-hydrolens-dark">الترطيب التلقائي بالذكاء (Auto-Pilot)</h4>
-                        <p class="text-[9px] text-hydrolens-muted">إطلاق الرذاذ فور رصد جفاف القرنية</p>
+                        <h4 class="text-xs font-bold text-hydrolens-dark">نظام الترطيب التلقائي بالـ AI</h4>
+                        <p class="text-[9px] text-hydrolens-muted">إطلاق الرذاذ فور اكتشاف أي مؤشر لجفاف القرنية</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="autopilotToggle" checked onchange="toggleAutopilot()" class="sr-only peer">
@@ -224,26 +245,26 @@
                     </label>
                 </div>
 
-                <button onclick="triggerManualSpray()" class="w-full py-2.5 ai-gradient-btn text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
-                    <i class="fa-solid fa-spray-can text-sm"></i> إرسال بخة ترطيب فورية للنظارة
+                <button onclick="triggerManualSpray()" class="w-full py-2.5 ai-gradient-btn text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95">
+                    <i class="fa-solid fa-spray-can text-sm"></i> إطلاق رذاذ ترطيب يدوي عبر النظارة
                 </button>
             </div>
 
-            <!-- Presentation Simulator Buttons -->
-            <div class="bg-white/80 border border-hydrolens-purple/20 rounded-2xl p-2.5">
-                <span class="text-[10px] text-hydrolens-purple font-extrabold block mb-1.5 text-center"><i class="fa-solid fa-vial ml-1"></i> محاكاة العرض التقديمي (لجنة التقييم)</span>
+            <!-- Presentation Simulation Buttons -->
+            <div class="bg-white/90 border border-hydrolens-purple/20 rounded-2xl p-2.5">
+                <span class="text-[10px] text-hydrolens-purple font-black block mb-1.5 text-center"><i class="fa-solid fa-vial ml-1"></i> محاكاة الذكاء الاصطناعي (لعرض لجنة المناقشة)</span>
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white hover:bg-gray-50 border border-hydrolens-purple/20 text-[10px] font-bold rounded-xl text-hydrolens-dark shadow-sm">
-                        🟢 قراءة مريحة
+                        🟢 محاكاة وضع مريح
                     </button>
                     <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-[10px] font-bold rounded-xl text-rose-600 shadow-sm">
-                        🔴 رصد جفاف حاد
+                        🔴 محاكاة جفاف العين الحاد
                     </button>
                 </div>
             </div>
 
-            <!-- Support & Troubleshooting Modal Link -->
-            <div class="bg-white/90 border border-hydrolens-purple/20 rounded-2xl p-2.5 flex justify-between items-center shadow-sm">
+            <!-- Support & Troubleshooting -->
+            <div class="bg-white border border-hydrolens-purple/20 rounded-2xl p-2.5 flex justify-between items-center shadow-sm">
                 <div class="flex items-center gap-2">
                     <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs font-bold">
                         <i class="fa-solid fa-headset"></i>
@@ -268,16 +289,16 @@
                 <button onclick="closeTroubleshooting()" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark text-sm"></i></button>
             </div>
             <div class="space-y-2 text-[11px] text-hydrolens-muted leading-relaxed">
-                <p>• <strong>توقف البخاخ:</strong> افحص خزان الماء الصغير بالنظارة وشحن البطارية.</p>
-                <p>• <strong>مشكلة البلوتوث:</strong> تأكد من تفعيل البلوتوث والاقتراب من النظارة (أقل من 2 متر).</p>
+                <p>• <strong>توقف البخاخ الذكي:</strong> تأكد من امتلاء خزان الماء الصغير بالنظارة وشحن البطارية.</p>
+                <p>• <strong>مشكلة الاتصال العصبي:</strong> تأكد من تفعيل البلوتوث وقرب الهاتف (أقل من 2 متر).</p>
             </div>
             <button onclick="closeTroubleshooting()" class="w-full py-2.5 ai-gradient-btn text-white text-xs font-bold rounded-xl shadow-sm">إغلاق</button>
         </div>
     </div>
 
-    <!-- JavaScript Logic & Strict Validations -->
+    <!-- AI Neural Script & Strict Logic -->
     <script>
-        let validGeneratedOTP = "";
+        let officialServerOTP = "";
         let autopilotActive = true;
         let isSprayCooldown = false;
 
@@ -288,52 +309,50 @@
             document.getElementById('toastMessage').innerText = message;
             
             if(isError) {
-                toastIcon.className = "fa-solid fa-triangle-exclamation text-rose-400 text-base";
+                toastIcon.className = "fa-solid fa-triangle-exclamation text-rose-400 text-base animate-bounce";
             } else {
-                toastIcon.className = "fa-solid fa-circle-check text-hydrolens-teal text-base";
+                toastIcon.className = "fa-solid fa-brain text-hydrolens-teal text-base animate-pulse";
             }
 
-            toast.classList.remove('-translate-y-24', 'opacity-0');
+            toast.classList.remove('-translate-y-28', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
             
-            setTimeout(hideToast, 4500);
+            setTimeout(hideToast, 5000);
         }
 
         function hideToast() {
             const toast = document.getElementById('toastNotification');
-            toast.classList.add('-translate-y-24', 'opacity-0');
+            toast.classList.add('-translate-y-28', 'opacity-0');
             toast.classList.remove('translate-y-0', 'opacity-100');
         }
 
-        // STRICT EMAIL REGEX VALIDATION
         function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        // SEND STRICT OTP
-        function sendStrictOTP() {
+        // SEND SECURE OTP TO EMAIL
+        function sendSecureOTP() {
             const email = document.getElementById('emailInput').value.trim();
+            const glassesId = document.getElementById('glassesIdInput').value.trim().toUpperCase() || "HL-9024";
             const emailError = document.getElementById('emailError');
 
             if(!isValidEmail(email)) {
                 emailError.classList.remove('hidden');
-                showToast('يرجى كتابة بريد إلكتروني حقيقي بصيغة صحيحة!', true);
+                showToast('خطأ: يرجى كتابة بريد إلكتروني صحيح أولاً لتلقي رمز التحقق', true);
                 return;
             }
             emailError.classList.add('hidden');
 
-            // Generate strict 6-digit number OTP
-            validGeneratedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            officialServerOTP = Math.floor(100000 + Math.random() * 900000).toString();
             
-            showToast(`📩 تم توليد الكود لـ (${email}): رمز التحقق هو [ ${validGeneratedOTP} ]`);
+            showToast(`🤖 [AI Mail Server]: تم إرسال الرمز ومعرّف النظارة إلى بريدك (${email})\n• الرمز السري: [ ${officialServerOTP} ]\n• معرّف النظارة: [ ${glassesId} ]`);
         }
 
-        // VALIDATE ALL FIELDS BEFORE LOGIN
-        function validateAndLogin() {
+        // STRICT VERIFICATION & LOGIN
+        function verifyAndEnter() {
             const email = document.getElementById('emailInput').value.trim();
             const otp = document.getElementById('otpInput').value.trim();
-            const glassesId = document.getElementById('glassesIdInput').value.trim();
+            const glassesId = document.getElementById('glassesIdInput').value.trim().toUpperCase();
 
             const emailError = document.getElementById('emailError');
             const otpError = document.getElementById('otpError');
@@ -341,7 +360,6 @@
 
             let hasError = false;
 
-            // 1. Email Check
             if(!isValidEmail(email)) {
                 emailError.classList.remove('hidden');
                 hasError = true;
@@ -349,15 +367,13 @@
                 emailError.classList.add('hidden');
             }
 
-            // 2. OTP Check
-            if(!otp || (validGeneratedOTP && otp !== validGeneratedOTP)) {
+            if(!otp || otp.length !== 6 || otp !== officialServerOTP) {
                 otpError.classList.remove('hidden');
                 hasError = true;
             } else {
                 otpError.classList.add('hidden');
             }
 
-            // 3. Glasses ID Check
             if(!glassesId || glassesId.length < 3) {
                 glassesError.classList.remove('hidden');
                 hasError = true;
@@ -366,19 +382,18 @@
             }
 
             if(hasError) {
-                showToast('عذراً! البيانات المدخلة غير صحيحة، يرجى التثبت.', true);
+                showToast('عذراً! فشل التحقق الأمني للذكاء الاصطناعي. تأكد من صحة البيانات.', true);
                 return;
             }
 
-            // SUCCESS LOGIN
             document.getElementById('userEmailDisplay').innerText = email;
-            document.getElementById('activeGlassesBadge').innerText = `${glassesId} (اقتران نشط)`;
+            document.getElementById('activeGlassesBadge').innerText = `${glassesId} (تحليل حي مستمر)`;
 
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
             document.getElementById('dashboardScreen').classList.add('flex');
 
-            showToast(`تم التحقق والاقتران بالنظارة ${glassesId} بنجاح ✨`);
+            showToast(`أهلاً بكِ في عالم الذكاء الاصطناعي! تم ربط النظارة ${glassesId} بنجاح ✨`);
             setTimeout(() => { simulateEnvironment('normal'); }, 1000);
         }
 
@@ -386,23 +401,24 @@
             document.getElementById('dashboardScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('flex');
             document.getElementById('authScreen').classList.remove('hidden');
-            showToast('تم تسجيل الخروج بنجاح');
+            document.getElementById('otpInput').value = '';
+            showToast('تم إغلاق الجلسة بأمان');
         }
 
         function triggerManualSpray() {
             if(isSprayCooldown) {
-                showToast('الرجاء الانتظار ثوانٍ قبل بخة جديدة', true);
+                showToast('الرجاء الانتظار ثوانٍ معدودة قبل بخة جديدة', true);
                 return;
             }
 
             isSprayCooldown = true;
-            showToast('💧 تم إرسال إشارة البخات للنظارة الذكية بنجاح!');
+            showToast('💧 [AI Core]: تم إرسال إشارة إطلاق الرذاذ الذكي إلى النظارة بنجاح!');
             setTimeout(() => { isSprayCooldown = false; }, 3000);
         }
 
         function toggleAutopilot() {
             autopilotActive = document.getElementById('autopilotToggle').checked;
-            showToast(autopilotActive ? 'تم تفعيل الترطيب التلقائي بالذكاء الاصطناعي' : 'تم إيقاف الترطيب التلقائي');
+            showToast(autopilotActive ? 'تم تفعيل الطيار الآلي للترطيب (AI Auto-Pilot)' : 'تم إيقاف الترطيب التلقائي');
         }
 
         function showTroubleshooting() {
@@ -425,39 +441,39 @@
             const aiInsightText = document.getElementById('aiInsightText');
 
             if(type === 'dry') {
-                humidityVal.innerText = '15%';
+                humidityVal.innerText = '14%';
                 humidityStatus.innerText = 'تحذير: جفاف حاد!';
                 humidityStatus.className = 'text-[9px] text-rose-600 bg-rose-50 py-0.5 px-2 rounded-full font-bold animate-pulse';
 
-                luxVal.innerHTML = '900 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
-                luxStatus.innerText = 'إضاءة مجهدة';
+                luxVal.innerHTML = '920 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
+                luxStatus.innerText = 'إضاءة مجهدة للقرنية';
                 luxStatus.className = 'text-[9px] text-amber-600 bg-amber-50 py-0.5 px-2 rounded-full font-bold';
 
-                eyeScore.innerText = '52%';
-                eyeScoreStatus.innerText = 'رصد إجهاد بالقرنية';
+                eyeScore.innerText = '49%';
+                eyeScoreStatus.innerText = 'تحذير: إجهاد حاد';
                 eyeScoreStatus.className = 'text-[10px] text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-full';
 
-                aiInsightText.innerText = "تحذير ذكي: رصد نظام الذكاء انخفاض رطوبة العين إلى 15% بسبب الإضاءة القوية. تم إطلاق رذاذ الترطيب لتفادي جفاف العين.";
+                aiInsightText.innerText = "🤖 [رصد الذكاء الاصطناعي]: انخفضت رطوبة القرنية إلى 14% بسبب الإضاءة المحيطة المرتفعة. قام النظام العصبي تلقائياً بتفعيل مضخة الرذاذ لحماية العين.";
 
                 if(autopilotActive) {
                     triggerManualSpray();
                 }
             } else {
-                humidityVal.innerText = '52%';
+                humidityVal.innerText = '54%';
                 humidityStatus.innerText = 'مستوى متوازن';
                 humidityStatus.className = 'text-[9px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full font-bold';
 
-                luxVal.innerHTML = '320 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
+                luxVal.innerHTML = '310 <span class="text-xs font-normal text-hydrolens-muted">Lux</span>';
                 luxStatus.innerText = 'إضاءة مثالية';
-                luxStatus.className = 'text-[9px] text-hydrolens-purple bg-hydrolens-purpleSoft py-0.5 px-2 rounded-full font-bold';
+                luxStatus.className = 'text-[9px] text-hydrolens-purple bg-hydrolens-purple/10 py-0.5 px-2 rounded-full font-bold';
 
-                eyeScore.innerText = '94%';
-                eyeScoreStatus.innerText = 'ممتاز جداً';
+                eyeScore.innerText = '96%';
+                eyeScoreStatus.innerText = 'ممتاز جداً (AI Stable)';
                 eyeScoreStatus.className = 'text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full';
 
-                aiInsightText.innerText = "تحليل الذكاء الاصطناعي: بيئة العين مثالية جداً. مستويات الإضاءة ورطوبة الهواء متوازنة ولا تستدعي إطلاق أي رذاذ حالياً.";
+                aiInsightText.innerText = "🤖 [تحليل الذكاء الاصطناعي]: بيئة العين في حالة استقرار تام ومثالية. معدل الرمش طبيعي ولا توجد أي مؤشرات للإجهاد حالياً.";
 
-                showToast('تمت المزامنة بنجاح مع مستشعرات النظارة الحية');
+                showToast('تمت مزامنة قراءات النظارة الحية عبر خوارزميات الـ AI بنجاح');
             }
         }
     </script>
