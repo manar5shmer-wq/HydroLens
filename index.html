@@ -3,438 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydrolens - AI Smart Eye Hydration System</title>
-    
-    <!-- مكتبة التصميم والأيقونات -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
+    <title>HydroLens - منصة النظارة الذكية</title>
+    <!-- استيراد خط Roboto والأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #F6F4EE; color: #0F1722; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border: 1px solid rgba(139, 120, 230, 0.2); }
-        .ai-gradient-btn { background: linear-gradient(135deg, #8B78E6, #52B3C8); }
-        .logo-gradient-text { background: linear-gradient(135deg, #8B78E6, #52B3C8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        #sideMenu { transition: transform 0.3s ease-in-out; }
+        :root {
+            --bg-color: #F3F5FA;
+            --card-color: #FFFFFF;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --primary: #5B61F4;
+            --border-color: #E5E7EB;
+        }
+
+        .dark-mode {
+            --bg-color: #10121A;
+            --card-color: #1A1D28;
+            --text-color: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --primary: #8B88E8;
+            --border-color: #2D3348;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 280px;
+            background-color: var(--card-color);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .drawer-header {
+            background: linear-gradient(135deg, #8B88E8, #63C5D6);
+            padding: 20px;
+            color: white;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+            margin-bottom: 8px;
+        }
+
+        .nav-links {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+            padding: 10px 0;
+        }
+
+        .nav-links li {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .nav-links li:hover, .nav-links li.active {
+            background-color: rgba(91, 97, 244, 0.1);
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 4px solid var(--primary);
+        }
+
+        .nav-links li i {
+            font-size: 16px;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            height: 60px;
+            background-color: var(--card-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .app-bar-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .app-bar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Cards & UI Elements */
+        .card {
+            background-color: var(--card-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            width: 100%;
+        }
+
+        .badge-simulation {
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        /* Chat Styles */
+        .chat-box {
+            height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .chat-bubble.user {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-start;
+        }
+
+        .chat-bubble.bot {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-color);
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-0 md:p-4">
+<body class="dark-mode">
 
-    <!-- إطار شاشة الجوال الأساسي -->
-    <div class="w-full max-w-md h-screen md:h-[880px] bg-[#F6F4EE] md:rounded-[44px] flex flex-col justify-between overflow-hidden relative shadow-2xl border border-purple-200">
-        
-        <!-- التنبيه العلوي (عشان يطلع فيه رمز التحقق السري بوضوح وثبات) -->
-        <div id="toastNotification" class="absolute top-5 left-4 right-4 bg-slate-900 text-white text-xs px-4 py-3.5 rounded-2xl flex items-center justify-between shadow-2xl transition-all duration-300 transform -translate-y-36 opacity-0 z-50 border border-teal-400/40">
-            <div class="flex items-start gap-2.5">
-                <i id="toastIcon" class="fa-solid fa-brain text-teal-400 text-base animate-pulse mt-0.5"></i>
-                <span id="toastMessage" class="font-medium leading-relaxed whitespace-pre-line">رسالة النظام...</span>
-            </div>
-            <button onclick="hideToast()" class="text-white/60 hover:text-white mr-2"><i class="fa-solid fa-xmark text-sm"></i></button>
+    <!-- القائمة الجانبية -->
+    <aside>
+        <div class="drawer-header">
+            <div class="brand-logo">H</div>
+            <div style="font-weight: bold; font-size: 15px;">منصة HydroLens الذكية</div>
+            <div style="font-size: 11px; opacity: 0.8;">وضع العرض والمحاكاة الأكاديمية 🧪</div>
         </div>
+        <ul class="nav-links" id="navLinks">
+            <li class="active" onclick="switchPage(0)"><i class="fa-solid fa-dashboard"></i> 1. الرئيسية</li>
+            <li onclick="switchPage(1)"><i class="fa-solid fa-eye"></i> 2. مراقبة العين</li>
+            <li onclick="switchPage(2)"><i class="fa-solid fa-lightbulb"></i> 3. الإضاءة المحيطة</li>
+            <li onclick="switchPage(3)"><i class="fa-solid fa-droplet"></i> 4. الترطيب الذكي</li>
+            <li onclick="switchPage(4)"><i class="fa-solid fa-robot"></i> 5. المساعد الذكي</li>
+            <li onclick="switchPage(5)"><i class="fa-solid fa-history"></i> 6. سجل القراءات</li>
+            <li onclick="switchPage(6)"><i class="fa-solid fa-chart-bar"></i> 7. التقارير والإحصائيات</li>
+            <li onclick="switchPage(7)"><i class="fa-solid fa-bell"></i> 8. مركز التنبيهات</li>
+            <li onclick="switchPage(8)"><i class="fa-solid fa-network-wired"></i> 9. حالة النظارة والحساسات</li>
+            <li onclick="switchPage(9)"><i class="fa-solid fa-gear"></i> 10. الإعدادات والخصوصية</li>
+        </ul>
+    </aside>
 
-        <!-- القائمة الجانبية المنسدلة (الثلاث خطوط ☰) لتحليلات وصحة العين -->
-        <div id="sideMenuOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300" onclick="toggleMenu()"></div>
-        <div id="sideMenu" class="absolute top-0 right-0 w-72 h-full bg-white z-50 shadow-2xl transform translate-x-full flex flex-col justify-between p-5 overflow-y-auto">
-            <div>
-                <div class="flex justify-between items-center border-b pb-3 mb-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
-                            <i class="fa-solid fa-eye text-sm"></i>
-                        </div>
-                        <h3 class="text-xs font-black">لوحة تحكم صحة العين</h3>
-                    </div>
-                    <button onclick="toggleMenu()" class="text-gray-400 hover:text-black"><i class="fa-solid fa-xmark text-base"></i></button>
-                </div>
-
-                <!-- تحليلات العين داخل القائمة الجانبية -->
-                <div class="space-y-3 text-xs">
-                    <div class="p-3 bg-gray-50 rounded-2xl border">
-                        <span class="font-bold text-purple-600 block mb-1"><i class="fa-solid fa-chart-line ml-1"></i> معدل الجفاف والترطيب</span>
-                        <p class="text-[11px] text-gray-500">نسبة الترطيب الحالية: <span id="menuHumidityVal" class="font-black text-black">--%</span></p>
-                    </div>
-
-                    <div class="p-3 bg-gray-50 rounded-2xl border">
-                        <span class="font-bold text-teal-600 block mb-1"><i class="fa-solid fa-sun ml-1"></i> تأثير الإضاءة المحيطة</span>
-                        <p class="text-[11px] text-gray-500" id="menuLightStatus">تحليل مستوى الضوء وقرنية العين...</p>
-                    </div>
-
-                    <div class="p-3 bg-rose-50 rounded-2xl border border-rose-100">
-                        <span class="font-bold text-rose-600 block mb-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i> تنبيهات الاستخدام والإجهاد</span>
-                        <p class="text-[11px] text-rose-700" id="menuAlertsText">رصد ساعات استخدام الشاشات والراحة.</p>
-                    </div>
-
-                    <div class="p-3 bg-gray-50 rounded-2xl border space-y-1">
-                        <span class="font-bold text-purple-600 block"><i class="fa-solid fa-lightbulb ml-1"></i> اقتراحات تحسين العادات</span>
-                        <ul class="text-[10px] text-gray-500 space-y-1 list-disc list-inside">
-                            <li>تطبيق قاعدة 20-20-20 للراحة من الشاشات.</li>
-                            <li>شرب الماء بانتظام واستخدام البخاخ الآلي.</li>
-                        </ul>
-                    </div>
-                </div>
+    <!-- المحتوى الرئيسي -->
+    <div class="main-container">
+        <header>
+            <div class="app-bar-title">
+                <div class="brand-logo" style="width: 32px; height: 32px; font-size: 18px; margin:0;">H</div>
+                <span>HydroLens</span>
             </div>
-
-            <div class="pt-4 border-t text-center">
-                <button onclick="logout()" class="w-full py-2.5 bg-rose-50 text-rose-600 font-bold rounded-xl text-xs">
-                    <i class="fa-solid fa-right-from-bracket ml-1"></i> تسجيل الخروج
-                </button>
+            <div class="app-bar-actions">
+                <button class="icon-btn" onclick="toggleBluetooth()"><i id="btIcon" class="fa-solid fa-bluetooth-b" style="color: grey;"></i></button>
+                <button class="icon-btn" onclick="toggleTheme()"><i id="themeIcon" class="fa-solid fa-sun" style="color: amber;"></i></button>
             </div>
-        </div>
+        </header>
 
-        <!-- شاشة تسجيل الدخول والربط (Auth Screen) -->
-        <div id="authScreen" class="flex-1 flex flex-col justify-between p-6 z-10 overflow-y-auto">
-            
-            <!-- الشعار المربع متساوي الأبعاد -->
-            <div class="text-center pt-4 my-auto">
-                <div class="w-20 h-20 aspect-square mx-auto mb-3 rounded-2xl bg-white border border-teal-200 flex items-center justify-center shadow-lg relative">
-                    <span class="text-4xl font-black logo-gradient-text">H</span>
-                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-teal-400 animate-ping"></div>
-                </div>
-                <h1 class="text-2xl font-black tracking-wide">Hydrolens</h1>
-                <p id="authSubtitle" class="text-xs text-gray-500 font-bold mt-1">تسجيل الدخول الآمن بالنظارة الذكية</p>
-            </div>
-
-            <!-- الحقول -->
-            <div class="space-y-3.5 my-auto">
-                <!-- الإيميل -->
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-800 pr-1 flex items-center gap-1">
-                        <i class="fa-solid fa-envelope text-purple-600"></i> البريد الإلكتروني
-                    </label>
-                    <input type="email" id="emailInput" placeholder="name@domain.com" class="w-full bg-white border rounded-2xl px-4 py-3 text-sm outline-none shadow-sm" oninput="checkRegisteredUser()">
-                    <p id="emailError" class="text-[10px] text-rose-500 font-bold hidden pr-1">يرجى إدخال بريد صحيح</p>
-                </div>
-
-                <!-- الرمز السري OTP -->
-                <div class="space-y-1">
-                    <div class="flex justify-between items-center pr-1">
-                        <label class="text-xs font-bold text-gray-800 flex items-center gap-1">
-                            <i class="fa-solid fa-lock text-teal-600"></i> رمز التحقق السري (OTP)
-                        </label>
-                        <button type="button" id="sendOtpBtn" onclick="sendSecureOTP()" class="text-[11px] text-purple-600 font-extrabold hover:underline">إرسال الرمز للإيميل <i class="fa-solid fa-paper-plane ml-0.5"></i></button>
-                    </div>
-                    <input type="password" id="otpInput" maxlength="6" placeholder="••••••" class="w-full bg-white border rounded-2xl px-4 py-3 text-sm outline-none shadow-sm tracking-widest font-bold">
-                    <p id="otpError" class="text-[10px] text-rose-500 font-bold hidden pr-1">رمز التحقق غير صحيح</p>
-                </div>
-
-                <!-- معرّف النظارة (يظهر أول مرة فقط، ويتخفي في المرات القادمة) -->
-                <div class="space-y-1" id="glassesIdContainer">
-                    <label class="text-xs font-bold text-gray-800 pr-1 flex items-center gap-1">
-                        <i class="fa-solid fa-glasses text-purple-600"></i> معرّف النظارة الفريد (Glasses ID)
-                    </label>
-                    <input type="text" id="glassesIdInput" placeholder="HL-9024" class="w-full bg-white border rounded-2xl px-4 py-3 text-sm outline-none shadow-sm uppercase font-mono">
-                    <p id="glassesError" class="text-[10px] text-rose-500 font-bold hidden pr-1">يرجى إدخال معرّف نظارة صحيح</p>
-                </div>
-
-                <!-- زر نسيت الرمز (يرسل رمز جديد فقط بدون معرّف) -->
-                <div class="text-left">
-                    <button type="button" onclick="forgotPassword()" class="text-[11px] text-gray-500 hover:text-purple-600 font-bold">نسيت رمز التحقق؟</button>
-                </div>
-
-                <button onclick="verifyAndEnter()" class="w-full py-3.5 ai-gradient-btn text-white font-black rounded-2xl text-sm shadow-lg">تأكيد والدخول للنظام</button>
-            </div>
-
-            <div class="text-center text-[10px] text-gray-400 font-bold pb-1">Hydrolens Smart IoT Ecosystem</div>
-        </div>
-
-        <!-- الشاشة 2: لوحة التحكم الرئيسية بالذكاء الاصطناعي (Dashboard) -->
-        <div id="dashboardScreen" class="hidden flex-1 flex-col justify-between p-5 z-10 overflow-y-auto space-y-3.5">
-            
-            <!-- الهيدر العلوي -->
-            <div class="flex justify-between items-center pt-2">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-white border flex items-center justify-center text-purple-600 shadow-sm">
-                        <i class="fa-solid fa-robot text-sm"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xs font-black">مرحباً بكِ 👋</h2>
-                        <p class="text-[10px] text-gray-500 font-bold truncate max-w-[140px]" id="userEmailDisplay">user@domain.com</p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center gap-1.5">
-                    <div class="px-2 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-700 flex items-center gap-1">
-                        <i class="fa-solid fa-bluetooth text-blue-500 fa-pulse"></i>
-                        <i class="fa-solid fa-wifi text-emerald-500"></i>
-                        <span>مقترن تلقائياً</span>
-                    </div>
-                    <button onclick="toggleMenu()" class="w-9 h-9 rounded-xl bg-white border flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-bars text-sm"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- بطاقة النظارة -->
-            <div class="bg-gradient-to-r from-purple-50 to-teal-50 border border-teal-200 rounded-2xl p-3 flex justify-between items-center shadow-sm">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-teal-500 text-white flex items-center justify-center text-xs shadow-md">
-                        <i class="fa-solid fa-glasses"></i>
-                    </div>
-                    <div>
-                        <span class="text-[10px] font-black block">النظارة المرتبطة حالياً</span>
-                        <span class="text-[9px] text-teal-700 font-extrabold" id="activeGlassesBadge">HL-9024 (اتصال نشط)</span>
-                    </div>
-                </div>
-                <span class="text-[9px] bg-emerald-500 text-white font-black px-2.5 py-1 rounded-full shadow-sm">نشط الآن</span>
-            </div>
-
-            <!-- مؤشر راحة العين بالـ AI -->
-            <div class="glass-card rounded-3xl p-4 flex items-center justify-between border-l-4 border-l-purple-600 relative overflow-hidden">
-                <div>
-                    <span class="text-[10px] font-extrabold text-gray-500 block mb-0.5">مؤشر راحة العين الذكي (AI Index)</span>
-                    <div class="flex items-baseline gap-2">
-                        <span id="eyeScoreValue" class="text-3xl font-black logo-gradient-text">--%</span>
-                        <span id="eyeScoreStatus" class="text-[10px] text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full">بانتظار المزامنة...</span>
-                    </div>
-                    <p class="text-[9px] text-gray-500 font-bold mt-1">قراءة فورية من مستشعرات القرنية والإضاءة</p>
-                </div>
-                <div class="w-14 h-14 rounded-2xl bg-white border flex items-center justify-center text-teal-500 text-2xl shadow-inner">
-                    <i class="fa-solid fa-eye animate-pulse"></i>
-                </div>
-            </div>
-
-            <!-- صندوق نصائح وتقارير الذكاء الاصطناعي Live AI -->
-            <div class="bg-gradient-to-r from-white to-teal-50/50 rounded-2xl p-3.5 border border-teal-200 space-y-1.5 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-1.5 text-purple-600 font-black text-xs">
-                        <i class="fa-solid fa-brain"></i> <span>التوجيه والتحليل الذكي (AI Engine)</span>
-                    </div>
-                    <span class="text-[9px] bg-purple-100 text-purple-600 font-bold px-2 py-0.5 rounded-md">Live AI</span>
-                </div>
-                <p id="aiInsightText" class="text-[10px] text-gray-700 leading-relaxed font-bold">
-                    النظارة مقترنة تلقائياً. استخدمي أزرار المحاكاة بالأسفل لرؤية الاستجابة الفورية لخوارزميات الـ AI.
-                </p>
-            </div>
-
-            <!-- الحساسات (تبدأ فارغة [--] قبل المزامنة) -->
-            <div class="grid grid-cols-2 gap-2.5">
-                <div class="glass-card rounded-2xl p-3.5 text-center">
-                    <div class="text-teal-600 text-xs font-bold mb-1"><i class="fa-solid fa-droplet"></i> رطوبة القرنية</div>
-                    <div id="humidityValue" class="text-xl font-black my-0.5">--%</div>
-                    <div id="humidityStatus" class="text-[9px] text-gray-400 bg-gray-100 py-0.5 px-2 rounded-full inline-block font-bold">بانتظار المزامنة</div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-3.5 text-center">
-                    <div class="text-purple-600 text-xs font-bold mb-1"><i class="fa-solid fa-sun"></i> شدة الإضاءة</div>
-                    <div id="luxValue" class="text-xl font-black my-0.5">-- <span class="text-xs font-normal text-gray-500">Lux</span></div>
-                    <div id="luxStatus" class="text-[9px] text-gray-400 bg-gray-100 py-0.5 px-2 rounded-full inline-block font-bold">بانتظار المزامنة</div>
-                </div>
-            </div>
-
-            <!-- أزرار الترطيب اليدوي والتلقائي -->
-            <div class="glass-card rounded-2xl p-3.5 space-y-2.5">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h4 class="text-xs font-bold">الترطيب التلقائي بالـ AI</h4>
-                        <p class="text-[9px] text-gray-500">إطلاق الرذاذ فور اكتشاف الجفاف</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="autopilotToggle" checked onchange="toggleAutopilot()" class="sr-only peer">
-                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
-                    </label>
-                </div>
-                <button onclick="triggerManualSpray()" class="w-full py-2.5 ai-gradient-btn text-white font-extrabold text-xs rounded-xl shadow-sm">إطلاق رذاذ ترطيب يدوي 💧</button>
-            </div>
-
-            <!-- أزرار المحاكاة للعرض أمام اللجنة -->
-            <div class="bg-white/90 border border-purple-200 rounded-2xl p-2.5">
-                <span class="text-[10px] text-purple-600 font-black block mb-1.5 text-center"><i class="fa-solid fa-vial ml-1"></i> محاكاة النظارة (للجنة المناقشة)</span>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateEnvironment('normal')" class="py-1.5 bg-white border text-[10px] font-bold rounded-xl shadow-sm">🟢 وضع مريح</button>
-                    <button onclick="simulateEnvironment('dry')" class="py-1.5 bg-rose-50 border border-rose-200 text-[10px] font-bold rounded-xl text-rose-600 shadow-sm">🔴 إجهاد وجفاف</button>
-                </div>
-            </div>
-
-        </div>
-
+        <content-area id="contentArea">
+            <!-- الشاشات سيتم التحكم بها عبر JavaScript -->
+        </content-area>
     </div>
 
-    <!-- البرمجة بلغة جافاسكريبت مشروحة باللهجة العامية -->
     <script>
-        let officialServerOTP = ""; // هنا نخزن الرمز السري اللي يوصل
-        let currentGlassesId = "";  // هنا نخزن معرّف النظارة
-        let otpSentCount = 0;        // عشان نمنع إرسال الكود كذا مرة
-        let autopilotActive = true; 
+        let isDarkMode = true;
+        let isBluetoothConnected = false;
+        let isAutoPilot = true;
+        let humidityPercent = null;
+        let lightLux = null;
+        let lastUpdate = null;
+        let sprayBtnLabel = 'إصدار أمر ترطيب (وضع محاكاة العرض)';
         let isSprayCooldown = false;
+        
+        let sensorHistory = [];
+        let notifications = [];
+        let chatMessages = [
+            { text: 'مرحباً بك! أنا مساعد HydroLens الذكي. يمكنك الاستفسار عن القراءات المتاحة والتوصيات المناسبة للعرض.', isUser: false }
+        ];
 
-        // أول ما يفتح الموقع، نشيّك لو المستخدم مسجل من قبل في الجهاز
-        window.addEventListener('DOMContentLoaded', () => {
-            let savedEmail = localStorage.getItem('hydrolens_user_email');
-            if(savedEmail) {
-                document.getElementById('emailInput').value = savedEmail;
-                checkRegisteredUser(); // عشان نخفي خانة معرّف النظارة لو مسجل قديم
-            }
-        });
+        let currentTab = 0;
 
-        // فتح وإغلاق القائمة الجانبية (الثلاث خطوط)
-        function toggleMenu() {
-            let menu = document.getElementById('sideMenu');
-            let overlay = document.getElementById('sideMenuOverlay');
-            let isOpen = !menu.classList.contains('translate-x-full');
-            if(isOpen) {
-                menu.classList.add('translate-x-full'); overlay.classList.add('hidden');
-            } else {
-                menu.classList.remove('translate-x-full'); overlay.classList.remove('hidden');
-            }
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('themeIcon').className = isDarkMode ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
 
-        // إظهار التنبيه العلوي الثابت
-        function showToast(msg) {
-            let toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = msg;
-            toast.classList.remove('-translate-y-36', 'opacity-0');
-        }
-        function hideToast() {
-            document.getElementById('toastNotification').classList.add('-translate-y-36', 'opacity-0');
+        function toggleBluetooth() {
+            isBluetoothConnected = !isBluetoothConnected;
+            document.getElementById('btIcon').style.color = isBluetoothConnected ? 'teal' : 'grey';
+            showToast(isBluetoothConnected ? 'تمت محاكاة اتصال البلوتوث بنجاح' : 'تم قطع اتصال البلوتوث');
         }
 
-        function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
-
-        // دالة فحص المستخدم: لو مسجل قديم نخفي خانة المعرّف (عشان ما يتكرر)
-        function checkRegisteredUser() {
-            let email = document.getElementById('emailInput').value.trim();
-            let registeredEmail = localStorage.getItem('hydrolens_user_email');
-            let glassesContainer = document.getElementById('glassesIdContainer');
-            let subtitle = document.getElementById('authSubtitle');
-
-            if(registeredEmail && registeredEmail === email) {
-                glassesContainer.style.display = 'none'; // مسجل من قبل -> ما نطلب المعرّف
-                subtitle.innerText = "أهلاً بك مجدداً! أدخل الإيميل ورمز التحقق للدخول";
-            } else {
-                glassesContainer.style.display = 'block'; // أول مرة -> نطلب المعرّف
-                subtitle.innerText = "تسجيل الحساب الجديد ومعرّف النظارة لأول مرة";
-            }
+        function showToast(text) {
+            alert(text); // يمكن استبدالها بـ Toast مخصص خفيف
         }
 
-        // إرسال رمز التحقق (أول مرة مع المعرّف)
-        function sendSecureOTP() {
-            let email = document.getElementById('emailInput').value.trim();
-            let glassesInput = document.getElementById('glassesIdInput').value.trim().toUpperCase();
+        function switchPage(index) {
+            currentTab = index;
+            document.querySelectorAll('.nav-links li').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+            renderPage();
+        }
 
-            if(!isValidEmail(email)) { showToast('اكتب إيميل صحيح أولاً!', true); return; }
-            if(otpSentCount >= 1) { showToast('⚠️ الرمز أُرسل مسبقاً، افحص التنبيه بالأعلى.', true); return; }
-
-            let registeredEmail = localStorage.getItem('hydrolens_user_email');
-            if(registeredEmail && registeredEmail === email) {
-                currentGlassesId = localStorage.getItem('hydrolens_glasses_id') || "HL-9024";
-            } else {
-                currentGlassesId = glassesInput || "HL-9024";
-            }
-
-            otpSentCount++;
-            officialServerOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        function processDataInput(hum, lux) {
+            humidityPercent = hum;
+            lightLux = lux;
+            lastUpdate = new Date();
             
-            document.getElementById('sendOtpBtn').innerText = "تم الإرسال ✓";
-            document.getElementById('sendOtpBtn').disabled = true;
+            sensorHistory.unshift({
+                time: lastUpdate.toLocaleTimeString(),
+                humidity: hum,
+                light: lux
+            });
 
-            // أول مرة يظهر الرمز ومعرّف النظارة
-            showToast(`📨 [رمز التحقق]: [ ${officialServerOTP} ]\n• معرّف النظارة: [ ${currentGlassesId} ]`);
-        }
-
-        // زر نسيت الرمز (التعديل المطلوب: يرسل الرمز الجديد فقط بدون معرّف النظارة)
-        function forgotPassword() {
-            let email = document.getElementById('emailInput').value.trim();
-            let registeredEmail = localStorage.getItem('hydrolens_user_email');
-
-            if(!isValidEmail(email)) { showToast('أدخل الإيميل أولاً في الحقل المخصص', true); return; }
-            if(!registeredEmail || registeredEmail !== email) { showToast('هذا الإيميل غير مسجل في هذا الجهاز', true); return; }
-
-            officialServerOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            
-            // يرسل رمز التحقق الجديد فقط بدون معرّف النظارة!
-            showToast(`🔄 [استعادة الرمز]: رمز التحقق الجديد هو: [ ${officialServerOTP} ]`);
-        }
-
-        // التحقق وتسجيل الدخول
-        function verifyAndEnter() {
-            let email = document.getElementById('emailInput').value.trim();
-            let otp = document.getElementById('otpInput').value.trim();
-            let glassesInput = document.getElementById('glassesIdInput').value.trim().toUpperCase();
-            let registeredEmail = localStorage.getItem('hydrolens_user_email');
-
-            if(!isValidEmail(email) || otp !== officialServerOTP || otp.length !== 6) {
-                showToast('خطأ: تأكد من صحة الإيميل أو رمز التحقق السري!', true);
-                return;
+            if(hum < 40) {
+                notifications.unshift({title: 'تنبيه جفاف الجو المحيط', desc: `انخفاض الرطوبة إلى ${hum}%. يوصى بأخذ استراحة وترطيب.`, time: lastUpdate.toLocaleTimeString()});
             }
-
-            let activeGlasses = "";
-            if(!registeredEmail || registeredEmail !== email) {
-                activeGlasses = glassesInput || "HL-9024";
-                localStorage.setItem('hydrolens_user_email', email);
-                localStorage.setItem('hydrolens_glasses_id', activeGlasses);
-            } else {
-                activeGlasses = localStorage.getItem('hydrolens_glasses_id') || "HL-9024";
+            if(lux > 800) {
+                notifications.unshift({title: 'تنبيه إضاءة عالية جداً', desc: `ارتفاع الضوء إلى ${lux} Lux. يفضل تقليل السطوع.`, time: lastUpdate.toLocaleTimeString()});
             }
-
-            hideToast();
-            document.getElementById('userEmailDisplay').innerText = email;
-            document.getElementById('activeGlassesBadge').innerText = `${activeGlasses} (متصل نشط)`;
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('dashboardScreen').classList.remove('hidden');
-            document.getElementById('dashboardScreen').classList.add('flex');
-            simulateEnvironment('normal');
-        }
-
-        // تسجيل الخروج
-        function logout() {
-            document.getElementById('dashboardScreen').classList.add('hidden');
-            document.getElementById('dashboardScreen').classList.remove('flex');
-            document.getElementById('authScreen').classList.remove('hidden');
-            document.getElementById('otpInput').value = '';
-            otpSentCount = 0;
-            document.getElementById('sendOtpBtn').innerText = "إرسال الرمز للإيميل";
-            document.getElementById('sendOtpBtn').disabled = false;
+            renderPage();
         }
 
         function triggerManualSpray() {
-            if(isSprayCooldown) { showToast('الرجاء الانتظار قليلاً قبل بخة جديدة', true); return; }
-            isSprayCooldown = true;
-            showToast('💧 [AI Core]: تم إرسال أمر إطلاق الرذاذ إلى النظارة بنجاح!');
-            setTimeout(() => { isSprayCooldown = false; }, 3000);
-        }
-
-        function toggleAutopilot() {
-            autopilotActive = document.getElementById('autopilotToggle').checked;
-            showToast(autopilotActive ? 'تم تفعيل الترطيب التلقائي بالـ AI' : 'تم إيقاف الترطيب التلقائي');
-        }
-
-        // دالة الـ AI والمحاكاة (تشرحينها للتيتشر بثقة)
-        function simulateEnvironment(type) {
-            if(type === 'dry') {
-                document.getElementById('humidityValue').innerText = '14%';
-                document.getElementById('humidityStatus').innerText = 'تحذير: جفاف حاد!';
-                document.getElementById('humidityStatus').className = 'text-[9px] text-rose-600 bg-rose-50 py-0.5 px-2 rounded-full font-bold animate-pulse';
-
-                document.getElementById('luxValue').innerHTML = '920 <span class="text-xs text-gray-500">Lux</span>';
-                document.getElementById('luxStatus').innerText = 'إضاءة مجهدة للشاشات';
-
-                document.getElementById('eyeScoreValue').innerText = '49%';
-                document.getElementById('eyeScoreStatus').innerText = 'تحذير: إجهاد حاد';
-                document.getElementById('eyeScoreStatus').className = 'text-[10px] text-rose-600 font-bold bg-rose-50 px-2.5 py-0.5 rounded-full';
-
-                document.getElementById('aiInsightText').innerText = "🚨 [تنبيه الـ AI]: رصد النظام انخفاض رطوبة القرنية إلى 14% مع إضاءة عالية (920 لوكس)! قام النظام تلقائياً بتفعيل مضخة الرذاذ لحماية العين.";
-                document.getElementById('menuAlertsText').innerText = "تنبيه نشط: تم رصد جفاف بالعين وإجهاد شاشات.";
-                document.getElementById('menuHumidityVal').innerText = '14%';
-                document.getElementById('menuLightStatus').innerText = 'إضاءة عالية مجهدة للعين';
-
-                if(autopilotActive) triggerManualSpray();
-            } else {
-                document.getElementById('humidityValue').innerText = '54%';
-                document.getElementById('humidityStatus').innerText = 'مستوى متوازن';
-                document.getElementById('humidityStatus').className = 'text-[9px] text-emerald-600 bg-emerald-50 py-0.5 px-2 rounded-full font-bold';
-
-                document.getElementById('luxValue').innerHTML = '310 <span class="text-xs text-gray-500">Lux</span>';
-                document.getElementById('luxStatus').innerText = 'إضاءة مثالية';
-
-                document.getElementById('eyeScoreValue').innerText = '96%';
-                document.getElementById('eyeScoreStatus').innerText = 'ممتاز جداً (AI Stable)';
-                document.getElementById('eyeScoreStatus').className = 'text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full';
-
-                document.getElementById('aiInsightText').innerText = "🤖 [تحليل الـ AI]: حالة العين مستقرة ومثالية تماماً. معدل الرمش طبيعي والإضاءة مريحة.";
-                document.getElementById('menuAlertsText').innerText = "لا توجد أي تنبيهات إجهاد نشطة حالياً.";
-                document.getElementById('menuHumidityVal').innerText = '54%';
-                document.getElementById('menuLightStatus').innerText = 'إضاءة محيطة مثالية ومريحة';
+            if(isSprayCooldown) {
+                showToast('إجراء آمن: يرجى الانتظار لحين انتهاء مهلة الأمان (60 ثانية)! ⏳');
+                return;
             }
+            sprayBtnLabel = 'جاري إرسال الأمر للنظارة بانتظار التأكيد... 🔄';
+            renderPage();
+
+            setTimeout(() => {
+                sprayBtnLabel = 'اكتملت محاكاة الترطيب 💧';
+                isSprayCooldown = true;
+                showToast('اكتملت محاكاة أمر الترطيب بنجاح 💧');
+                renderPage();
+
+                setTimeout(() => {
+                    isSprayCooldown = false;
+                    sprayBtnLabel = 'إصدار أمر ترطيب (وضع محاكاة العرض)';
+                    renderPage();
+                }, 5000); // تقليل مؤقت العرض للتجربة السريعة
+            }, 2000);
         }
+
+        function handleSendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            chatMessages.push({ text: text, isUser: true });
+            input.value = '';
+            renderPage();
+
+            setTimeout(() => {
+                let reply = 'القراءات الحالية للعرض: الرطوبة ' + (humidityPercent ?? 'غير محددة') + '% والإضاءة ' + (lightLux ?? 'غير محددة') + ' Lux.';
+                if(text.includes('رطوبة')) reply = `قراءة الرطوبة القريبة حالياً مسجلة عند ${humidityPercent ?? 0}%.`;
+                chatMessages.push({ text: reply, isUser: false });
+                renderPage();
+            }, 500);
+        }
+
+        function renderPage() {
+            const area = document.getElementById('contentArea');
+            let html = '';
+
+            switch(currentTab) {
+                case 0: // الرئيسية
+                    html = `
+                        <div class="badge-simulation">
+                            <span><i class="fa-solid fa-circle" style="color: orange; font-size: 8px;"></i> وضع المحاكاة للعرض الأكاديمي [بيانات تجريبية]</span>
+                            <span style="color: gray;">${lastUpdate ? 'آخر تحديث: ' + lastUpdate.toLocaleTimeString() : 'بانتظار الاختيار'}</span>
+                        </div>
+                        <div class="row">
+                            <div class="col card">
+                                <div style="display: flex; justify-content: space-between; color: gray; font-size: 11px;">
+                                    <i class="fa-solid fa-water" style="color: teal; font-size: 16px;"></i> رطوبة محيط العين
+                                </div>
+                                <div style="font-size: 18px; font-weight: bold; margin-top: 6px;">${humidityPercent !== null ? humidityPercent + '%' : 'بانتظار البيانات...'}</div>
+                            </div>
+                            <div class="col card">
+                                <div style="display: flex; justify-content: space-between; color: gray; font-size: 11px;">
+                                    <i class="fa-solid fa-lightbulb" style="color: amber; font-size: 16px;"></i> الإضاءة المحيطة
+                                </div>
+                                <div style="font-size: 18px; font-weight: bold; margin-top: 6px;">${lightLux !== null ? lightLux + ' Lux' : 'بانتظار البيانات...'}</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong>نظام الترطيب التلقائي</strong>
+                                <input type="checkbox" ${isAutoPilot ? 'checked' : ''} onchange="isAutoPilot = this.checked">
+                            </div>
+                            <p style="font-size: 11px; color: gray; margin: 4px 0 12px 0;">محاكاة إطلاق الرذاذ التلقائي عند انخفاض الرطوبة.</p>
+                            <button class="btn" onclick="triggerManualSpray()">${sprayBtnLabel}</button>
+                        </div>
+                        <div class="card">
+                            <strong>اختبار المحاكاة [خاص بلجنة المناقشة] 🧪</strong>
+                            <div class="row" style="margin-top: 10px;">
+                                <button class="btn-outline" style="color: red;" onclick="processDataInput(28, 890)">محاكاة جفاف وإضاءة عالية</button>
+                                <button class="btn-outline" style="color: green;" onclick="processDataInput(58, 310)">محاكاة وضع مريح ومثالي</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 1: // مراقبة العين
+                    html = `<div class="card"><h3>مراقبة رطوبة الجو المحيط بالعين 👁️</h3><p style="color:gray; font-size:11px; margin-top:6px;">القراءة الحالية: <b>${humidityPercent ?? 'غير متوفرة'}%</b></p></div>`;
+                    break;
+                case 2: // الإضاءة
+                    html = `<div class="card"><h3>مراقبة شدة الإضاءة المحيطة (Lux) 💡</h3><p style="color:gray; font-size:11px; margin-top:6px;">القراءة الحالية: <b>${lightLux ?? 'غير متوفرة'} Lux</b></p></div>`;
+                    break;
+                case 3: // الترطيب
+                    html = `<div class="card"><h3>نظام التحكم بالترطيب والرذاذ 💧</h3><button class="btn" style="margin-top:10px;" onclick="triggerManualSpray()">${sprayBtnLabel}</button></div>`;
+                    break;
+                case 4: // المساعد الذكي
+                    html = `
+                        <div class="card">
+                            <h3>مساعد HydroLens الذكي 🧠</h3>
+                            <div class="chat-box" id="chatBox">
+                                ${chatMessages.map(m => `<div class="chat-bubble ${m.isUser ? 'user' : 'bot'}">${m.text}</div>`).join('')}
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="chatInput" placeholder="اسأل عن القراءات والتقارير...">
+                                <button class="btn" style="width: auto; padding: 0 16px;" onclick="handleSendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 5: // السجل
+                    html = `<div class="card"><h3>سجل القراءات التجريبية المحفوظ 📜</h3><hr style="margin:10px 0;">` + 
+                        (sensorHistory.length === 0 ? '<p style="color:gray; font-size:12px;">لا توجد قراءات مسجلة حالياً.</p>' : 
+                        sensorHistory.map(s => `<div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border-color);">رطوبة: ${s.humidity}% | إضاءة: ${s.light} Lux [الوقت: ${s.time}]</div>`).join('')) + `</div>`;
+                    break;
+                case 6: // التقارير
+                    html = `<div class="card"><h3>التقارير والإحصائيات 📊</h3><p style="margin-top:10px; font-size:12px;">إجمالي السجلات: ${sensorHistory.length}</p></div>`;
+                    break;
+                case 7: // التنبيهات
+                    html = `<div class="card"><h3>مركز التنبيهات 🔔</h3>` + (notifications.length === 0 ? '<p style="color:gray; font-size:12px; margin-top:10px;">لا توجد تنبيهات.</p>' : notifications.map(n => `<div style="margin-top:8px; font-size:11px;"><b>${n.title}</b>: ${n.desc}</div>`).join('')) + `</div>`;
+                    break;
+                case 8: // حالة النظارة
+                    html = `<div class="card"><h3>حالة النظارة وعرض النظام 📡</h3><p style="font-size:11px; color:gray; margin-top:8px;">تطبيق ويب متكامل للعرض والمناقشة الأكاديمية.</p></div>`;
+                    break;
+                case 9: // الإعدادات
+                    html = `<div class="card"><h3>الإعدادات والخصوصية 🔒</h3><p style="font-size:11px; color:gray; margin-top:8px;">HydroLens - الإصدار 1.0.0 (مشروع تخرج أكاديمي).</p></div>`;
+                    break;
+            }
+            area.innerHTML = html;
+        }
+
+        renderPage();
     </script>
 </body>
 </html>
