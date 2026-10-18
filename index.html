@@ -4,52 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydroLens - منصة النظارة الذكية</title>
-    <!-- استيراد خط Roboto والأيقونات -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #F3F5FA;
-            --card-color: #FFFFFF;
-            --text-color: #111827;
-            --text-muted: #6B7280;
-            --primary: #5B61F4;
-            --border-color: #E5E7EB;
-        }
-
-        .dark-mode {
-            --bg-color: #10121A;
-            --card-color: #1A1D28;
-            --text-color: #F9FAFB;
-            --text-muted: #9CA3AF;
-            --primary: #8B88E8;
-            --border-color: #2D3348;
+            --font-family: 'Roboto', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: var(--font-family);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
             display: flex;
             height: 100vh;
             overflow: hidden;
+            background-color: #F3F5FA;
+            color: #111827;
         }
 
-        /* Sidebar */
+        body.dark-mode {
+            background-color: #10121A;
+            color: #F9FAFB;
+        }
+
+        /* Sidebar / Drawer */
         aside {
             width: 280px;
-            background-color: var(--card-color);
-            border-left: 1px solid var(--border-color);
+            background-color: #FFFFFF;
+            border-left: 1px solid #E5E7EB;
             display: flex;
             flex-direction: column;
             box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        body.dark-mode aside {
+            background-color: #1A1D28;
+            border-left-color: #2D3348;
         }
 
         .drawer-header {
@@ -87,18 +81,23 @@
             gap: 12px;
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-muted);
+            color: #6B7280;
+        }
+
+        body.dark-mode .nav-links li {
+            color: #9CA3AF;
         }
 
         .nav-links li:hover, .nav-links li.active {
             background-color: rgba(91, 97, 244, 0.1);
-            color: var(--primary);
+            color: #5B61F4;
             font-weight: bold;
-            border-right: 4px solid var(--primary);
+            border-right: 4px solid #5B61F4;
         }
 
-        .nav-links li i {
-            font-size: 16px;
+        body.dark-mode .nav-links li.active {
+            color: #8B88E8;
+            border-right-color: #8B88E8;
         }
 
         /* Main Content */
@@ -111,12 +110,17 @@
 
         header {
             height: 60px;
-            background-color: var(--card-color);
-            border-bottom: 1px solid var(--border-color);
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
+        }
+
+        body.dark-mode header {
+            background-color: #1A1D28;
+            border-bottom-color: #2D3348;
         }
 
         .app-bar-title {
@@ -150,37 +154,28 @@
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
             display: block;
         }
 
-        /* Cards & UI Elements */
         .card {
-            background-color: var(--card-color);
+            background-color: #FFFFFF;
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 14px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid var(--border-color);
+            border: 1px solid #E5E7EB;
         }
 
-        .row {
-            display: flex;
-            gap: 12px;
+        body.dark-mode .card {
+            background-color: #1A1D28;
+            border-color: #2D3348;
         }
 
-        .col {
-            flex: 1;
-        }
+        .row { display: flex; gap: 12px; }
+        .col { flex: 1; }
 
         .btn {
-            background-color: var(--primary);
+            background-color: #5B61F4;
             color: white;
             border: none;
             padding: 12px;
@@ -191,14 +186,12 @@
             font-size: 12px;
         }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
+        body.dark-mode .btn { background-color: #8B88E8; color: #10121A; }
 
         .btn-outline {
             background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
+            border: 1px solid #E5E7EB;
+            color: inherit;
             padding: 10px;
             border-radius: 10px;
             cursor: pointer;
@@ -206,9 +199,11 @@
             width: 100%;
         }
 
+        body.dark-mode .btn-outline { border-color: #2D3348; }
+
         .badge-simulation {
-            background-color: var(--card-color);
-            border: 1px solid var(--border-color);
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
             padding: 8px 14px;
             border-radius: 10px;
             display: flex;
@@ -219,9 +214,14 @@
             margin-bottom: 12px;
         }
 
+        body.dark-mode .badge-simulation {
+            background-color: #1A1D28;
+            border-color: #2D3348;
+        }
+
         /* Chat Styles */
         .chat-box {
-            height: 350px;
+            height: 300px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -237,36 +237,18 @@
             line-height: 1.5;
         }
 
-        .chat-bubble.user {
-            background-color: var(--primary);
-            color: white;
-            align-self: flex-start;
-        }
+        .chat-bubble.user { background-color: #5B61F4; color: white; align-self: flex-start; }
+        .chat-bubble.bot { background-color: #E5E7EB; color: #111827; align-self: flex-end; }
+        body.dark-mode .chat-bubble.bot { background-color: #2B2E3D; color: #F9FAFB; }
 
-        .chat-bubble.bot {
-            background-color: var(--border-color);
-            color: var(--text-color);
-            align-self: flex-end;
-        }
-
-        .chat-input-area {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
+        .chat-input-area { display: flex; gap: 8px; margin-top: 10px; }
         .chat-input-area input {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background-color: var(--card-color);
-            color: var(--text-color);
+            flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #E5E7EB;
+            background-color: #FFFFFF; color: inherit;
         }
+        body.dark-mode .chat-input-area input { background-color: #1A1D28; border-color: #2D3348; }
 
-        @media (max-width: 768px) {
-            aside { display: none; }
-        }
+        @media (max-width: 768px) { aside { display: none; } }
     </style>
 </head>
 <body class="dark-mode">
@@ -300,33 +282,114 @@
                 <span>HydroLens</span>
             </div>
             <div class="app-bar-actions">
-                <button class="icon-btn" onclick="toggleBluetooth()"><i id="btIcon" class="fa-solid fa-bluetooth-b" style="color: grey;"></i></button>
+                <button class="icon-btn" onclick="handleBluetoothButton()" title="اتصال بلوتوث"><i id="btIcon" class="fa-solid fa-bluetooth" style="color: grey;"></i></button>
                 <button class="icon-btn" onclick="toggleTheme()"><i id="themeIcon" class="fa-solid fa-sun" style="color: amber;"></i></button>
             </div>
         </header>
 
-        <content-area id="contentArea">
-            <!-- الشاشات سيتم التحكم بها عبر JavaScript -->
-        </content-area>
+        <content-area id="contentArea"></content-area>
     </div>
 
     <script>
+        /**
+         * نظام الاتصال المدمج (Bluetooth BLE)
+         */
+        class HydroLensBluetooth {
+            constructor() {
+                this.device = null;
+                this.server = null;
+                this.characteristic = null;
+                this.onDataReceived = null;
+                this.onConnectionChange = null;
+                
+                this.SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+                this.CHARACTERISTIC_UUID_TX = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+            }
+
+            isSupported() {
+                return navigator.bluetooth !== undefined;
+            }
+
+            async connect() {
+                if (!this.isSupported()) {
+                    throw new Error("متصفحك لا يدعم البلوتوث المباشر.");
+                }
+                try {
+                    this.device = await navigator.bluetooth.requestDevice({
+                        filters: [{ namePrefix: 'HydroLens' }, { services: [this.SERVICE_UUID] }],
+                        optionalServices: [this.SERVICE_UUID]
+                    });
+                    this.device.addEventListener('gattserverdisconnected', this.handleDisconnect.bind(this));
+                    this.server = await this.device.gatt.connect();
+                    const service = await this.server.getPrimaryService(this.SERVICE_UUID);
+                    this.characteristic = await service.getCharacteristic(this.CHARACTERISTIC_UUID_TX);
+                    await this.characteristic.startNotifications();
+                    this.characteristic.addEventListener('characteristicvaluechanged', this.handleDataNotification.bind(this));
+
+                    if (this.onConnectionChange) this.onConnectionChange(true, this.device.name);
+                    return true;
+                } catch (error) {
+                    console.error("فشل الاتصال:", error);
+                    throw error;
+                }
+            }
+
+            disconnect() {
+                if (this.device && this.device.gatt.connected) {
+                    this.device.gatt.disconnect();
+                }
+                this.handleDisconnect();
+            }
+
+            handleDisconnect() {
+                this.device = null;
+                this.server = null;
+                this.characteristic = null;
+                if (this.onConnectionChange) this.onConnectionChange(false, null);
+            }
+
+            handleDataNotification(event) {
+                const value = event.target.value;
+                const textData = new TextDecoder('utf-8').decode(value);
+                try {
+                    const data = JSON.parse(textData);
+                    if (typeof data.humidity === 'number' && typeof data.light === 'number') {
+                        if (this.onDataReceived) this.onDataReceived(data.humidity, data.light);
+                    }
+                } catch (e) {
+                    console.error("خطأ في تحليل البيانات الواردة:", textData);
+                }
+            }
+
+            async sendCommand(cmd) {
+                if (!this.characteristic || !this.device || !this.device.gatt.connected) {
+                    throw new Error("غير متصل بالنظارة!");
+                }
+                await this.characteristic.writeValue(new TextEncoder().encode(cmd));
+                return true;
+            }
+        }
+
+        const hydroBluetooth = new HydroLensBluetooth();
+
+        // متغيرات الحالة وتطبيق الواجهة
         let isDarkMode = true;
-        let isBluetoothConnected = false;
         let isAutoPilot = true;
         let humidityPercent = null;
         let lightLux = null;
         let lastUpdate = null;
-        let sprayBtnLabel = 'إصدار أمر ترطيب (وضع محاكاة العرض)';
-        let isSprayCooldown = false;
+        let dataSourceMode = 'simulation';
+        let sprayStatusText = 'إصدار أمر ترطيب (وضع محاكاة العرض)';
+        let isSprayingInProgress = false;
         
-        let sensorHistory = [];
+        let simulationHistory = [];
+        let realHistory = [];
         let notifications = [];
         let chatMessages = [
             { text: 'مرحباً بك! أنا مساعد HydroLens الذكي. يمكنك الاستفسار عن القراءات المتاحة والتوصيات المناسبة للعرض.', isUser: false }
         ];
-
         let currentTab = 0;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         function toggleTheme() {
             isDarkMode = !isDarkMode;
@@ -334,14 +397,88 @@
             document.getElementById('themeIcon').className = isDarkMode ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
 
-        function toggleBluetooth() {
-            isBluetoothConnected = !isBluetoothConnected;
-            document.getElementById('btIcon').style.color = isBluetoothConnected ? 'teal' : 'grey';
-            showToast(isBluetoothConnected ? 'تمت محاكاة اتصال البلوتوث بنجاح' : 'تم قطع اتصال البلوتوث');
+        hydroBluetooth.onConnectionChange = (connected, deviceName) => {
+            const btIcon = document.getElementById('btIcon');
+            if (connected) {
+                btIcon.style.color = 'teal';
+                dataSourceMode = 'real';
+                alert(`تم الاتصال بنجاح بالجهاز: ${deviceName}`);
+            } else {
+                btIcon.style.color = 'grey';
+                dataSourceMode = 'simulation';
+                alert('انقطع اتصال البلوتوث، وتم التحويل لوضع المحاكاة.');
+            }
+            renderPage();
+        };
+
+        hydroBluetooth.onDataReceived = (hum, lux) => {
+            processDataInput(hum, lux, 'real');
+        };
+
+        async function handleBluetoothButton() {
+            if (isIOS) {
+                alert('تنبيه آيفون (iOS): متصفح Safari لا يدعم البلوتوث المباشر. يمكنك استخدام التطبيق للاستعراض والتقارير.');
+                return;
+            }
+            try {
+                if (!hydroBluetooth.device || !hydroBluetooth.device.gatt.connected) {
+                    await hydroBluetooth.connect();
+                } else {
+                    hydroBluetooth.disconnect();
+                }
+            } catch (err) {
+                alert('فشل الاتصال: تأكد من تشغيل البلوتوث ودعم المتصفح.');
+            }
         }
 
-        function showToast(text) {
-            alert(text); // يمكن استبدالها بـ Toast مخصص خفيف
+        function processDataInput(hum, lux, source) {
+            humidityPercent = hum;
+            lightLux = lux;
+            lastUpdate = new Date();
+            dataSourceMode = source;
+
+            const record = { time: lastUpdate.toLocaleTimeString(), humidity: hum, light: lux };
+            if (source === 'simulation') {
+                simulationHistory.unshift(record);
+            } else {
+                realHistory.unshift(record);
+            }
+
+            if (hum < 40) notifications.unshift({title: 'تنبيه جفاف الجو', desc: `انخفاض الرطوبة إلى ${hum}%`, time: lastUpdate.toLocaleTimeString()});
+            if (lux > 800) notifications.unshift({title: 'تنبيه إضاءة عالية', desc: `ارتفاع الضوء إلى ${lux} Lux`, time: lastUpdate.toLocaleTimeString()});
+            renderPage();
+        }
+
+        async function triggerSpray() {
+            if (isSprayingInProgress) return;
+            isSprayingInProgress = true;
+            sprayStatusText = 'جاري إرسال الأمر للنظارة... 🔄';
+            renderPage();
+
+            if (dataSourceMode === 'real' && hydroBluetooth.device && hydroBluetooth.device.gatt.connected) {
+                try {
+                    await hydroBluetooth.sendCommand('CMD_SPRAY_ON');
+                    sprayStatusText = 'في انتظار تأكيد وحدة الرذاذ (ACK)... ⏳';
+                    renderPage();
+                    setTimeout(() => {
+                        sprayStatusText = 'تم استلام تأكيد التشغيل بنجاح 💧';
+                        isSprayingInProgress = false;
+                        renderPage();
+                        setTimeout(() => { sprayStatusText = 'إصدار أمر ترطيب مباشر'; renderPage(); }, 3000);
+                    }, 2500);
+                } catch (e) {
+                    sprayStatusText = 'فشل الإرسال ❌';
+                    isSprayingInProgress = false;
+                    renderPage();
+                }
+            } else {
+                setTimeout(() => {
+                    sprayStatusText = 'اكتملت محاكاة الترطيب بنجاح 💧';
+                    isSprayingInProgress = false;
+                    renderPage();
+                    setTimeout(() => { sprayStatusText = 'إصدار أمر ترطيب (وضع محاكاة العرض)'; renderPage(); }, 3000);
+                }, 2000);
+            }
         }
 
         function switchPage(index) {
@@ -352,75 +489,17 @@
             renderPage();
         }
 
-        function processDataInput(hum, lux) {
-            humidityPercent = hum;
-            lightLux = lux;
-            lastUpdate = new Date();
-            
-            sensorHistory.unshift({
-                time: lastUpdate.toLocaleTimeString(),
-                humidity: hum,
-                light: lux
-            });
-
-            if(hum < 40) {
-                notifications.unshift({title: 'تنبيه جفاف الجو المحيط', desc: `انخفاض الرطوبة إلى ${hum}%. يوصى بأخذ استراحة وترطيب.`, time: lastUpdate.toLocaleTimeString()});
-            }
-            if(lux > 800) {
-                notifications.unshift({title: 'تنبيه إضاءة عالية جداً', desc: `ارتفاع الضوء إلى ${lux} Lux. يفضل تقليل السطوع.`, time: lastUpdate.toLocaleTimeString()});
-            }
-            renderPage();
-        }
-
-        function triggerManualSpray() {
-            if(isSprayCooldown) {
-                showToast('إجراء آمن: يرجى الانتظار لحين انتهاء مهلة الأمان (60 ثانية)! ⏳');
-                return;
-            }
-            sprayBtnLabel = 'جاري إرسال الأمر للنظارة بانتظار التأكيد... 🔄';
-            renderPage();
-
-            setTimeout(() => {
-                sprayBtnLabel = 'اكتملت محاكاة الترطيب 💧';
-                isSprayCooldown = true;
-                showToast('اكتملت محاكاة أمر الترطيب بنجاح 💧');
-                renderPage();
-
-                setTimeout(() => {
-                    isSprayCooldown = false;
-                    sprayBtnLabel = 'إصدار أمر ترطيب (وضع محاكاة العرض)';
-                    renderPage();
-                }, 5000); // تقليل مؤقت العرض للتجربة السريعة
-            }, 2000);
-        }
-
-        function handleSendMessage() {
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if(!text) return;
-
-            chatMessages.push({ text: text, isUser: true });
-            input.value = '';
-            renderPage();
-
-            setTimeout(() => {
-                let reply = 'القراءات الحالية للعرض: الرطوبة ' + (humidityPercent ?? 'غير محددة') + '% والإضاءة ' + (lightLux ?? 'غير محددة') + ' Lux.';
-                if(text.includes('رطوبة')) reply = `قراءة الرطوبة القريبة حالياً مسجلة عند ${humidityPercent ?? 0}%.`;
-                chatMessages.push({ text: reply, isUser: false });
-                renderPage();
-            }, 500);
-        }
-
         function renderPage() {
             const area = document.getElementById('contentArea');
             let html = '';
+            const activeHistory = dataSourceMode === 'real' ? realHistory : simulationHistory;
 
             switch(currentTab) {
-                case 0: // الرئيسية
+                case 0:
                     html = `
                         <div class="badge-simulation">
-                            <span><i class="fa-solid fa-circle" style="color: orange; font-size: 8px;"></i> وضع المحاكاة للعرض الأكاديمي [بيانات تجريبية]</span>
-                            <span style="color: gray;">${lastUpdate ? 'آخر تحديث: ' + lastUpdate.toLocaleTimeString() : 'بانتظار الاختيار'}</span>
+                            <span><i class="fa-solid fa-circle" style="color: ${dataSourceMode === 'real' ? 'teal' : 'orange'}; font-size: 8px;"></i> المصدر: ${dataSourceMode === 'real' ? 'بيانات حقيقية' : 'محاكاة أكاديمية'}</span>
+                            <span style="color: gray;">${lastUpdate ? 'آخر تحديث: ' + lastUpdate.toLocaleTimeString() : 'بانتظار البيانات'}</span>
                         </div>
                         <div class="row">
                             <div class="col card">
@@ -441,28 +520,28 @@
                                 <strong>نظام الترطيب التلقائي</strong>
                                 <input type="checkbox" ${isAutoPilot ? 'checked' : ''} onchange="isAutoPilot = this.checked">
                             </div>
-                            <p style="font-size: 11px; color: gray; margin: 4px 0 12px 0;">محاكاة إطلاق الرذاذ التلقائي عند انخفاض الرطوبة.</p>
-                            <button class="btn" onclick="triggerManualSpray()">${sprayBtnLabel}</button>
+                            <p style="font-size: 11px; color: gray; margin: 4px 0 12px 0;">محاكاة أو تشغيل رذاذ الترطيب التلقائي.</p>
+                            <button class="btn" onclick="triggerSpray()">${sprayStatusText}</button>
                         </div>
                         <div class="card">
                             <strong>اختبار المحاكاة [خاص بلجنة المناقشة] 🧪</strong>
                             <div class="row" style="margin-top: 10px;">
-                                <button class="btn-outline" style="color: red;" onclick="processDataInput(28, 890)">محاكاة جفاف وإضاءة عالية</button>
-                                <button class="btn-outline" style="color: green;" onclick="processDataInput(58, 310)">محاكاة وضع مريح ومثالي</button>
+                                <button class="btn-outline" style="color: red;" onclick="processDataInput(28, 890, 'simulation')">محاكاة جفاف وإضاءة عالية</button>
+                                <button class="btn-outline" style="color: green;" onclick="processDataInput(58, 310, 'simulation')">محاكاة وضع مريح ومثالي</button>
                             </div>
                         </div>
                     `;
                     break;
-                case 1: // مراقبة العين
+                case 1:
                     html = `<div class="card"><h3>مراقبة رطوبة الجو المحيط بالعين 👁️</h3><p style="color:gray; font-size:11px; margin-top:6px;">القراءة الحالية: <b>${humidityPercent ?? 'غير متوفرة'}%</b></p></div>`;
                     break;
-                case 2: // الإضاءة
+                case 2:
                     html = `<div class="card"><h3>مراقبة شدة الإضاءة المحيطة (Lux) 💡</h3><p style="color:gray; font-size:11px; margin-top:6px;">القراءة الحالية: <b>${lightLux ?? 'غير متوفرة'} Lux</b></p></div>`;
                     break;
-                case 3: // الترطيب
-                    html = `<div class="card"><h3>نظام التحكم بالترطيب والرذاذ 💧</h3><button class="btn" style="margin-top:10px;" onclick="triggerManualSpray()">${sprayBtnLabel}</button></div>`;
+                case 3:
+                    html = `<div class="card"><h3>نظام التحكم بالترطيب والرذاذ 💧</h3><button class="btn" style="margin-top:10px;" onclick="triggerSpray()">${sprayStatusText}</button></div>`;
                     break;
-                case 4: // المساعد الذكي
+                case 4:
                     html = `
                         <div class="card">
                             <h3>مساعد HydroLens الذكي 🧠</h3>
@@ -471,30 +550,44 @@
                             </div>
                             <div class="chat-input-area">
                                 <input type="text" id="chatInput" placeholder="اسأل عن القراءات والتقارير...">
-                                <button class="btn" style="width: auto; padding: 0 16px;" onclick="handleSendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                                <button class="btn" style="width: auto; padding: 0 16px;" onclick="handleChat()"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
                     `;
                     break;
-                case 5: // السجل
-                    html = `<div class="card"><h3>سجل القراءات التجريبية المحفوظ 📜</h3><hr style="margin:10px 0;">` + 
-                        (sensorHistory.length === 0 ? '<p style="color:gray; font-size:12px;">لا توجد قراءات مسجلة حالياً.</p>' : 
-                        sensorHistory.map(s => `<div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border-color);">رطوبة: ${s.humidity}% | إضاءة: ${s.light} Lux [الوقت: ${s.time}]</div>`).join('')) + `</div>`;
+                case 5:
+                    html = `<div class="card"><h3>سجل القراءات [النمط: ${dataSourceMode}] 📜</h3><hr style="margin:10px 0;">` +
+                        (activeHistory.length === 0 ? '<p style="color:gray; font-size:12px;">لا توجد قراءات مسجلة.</p>' :
+                        activeHistory.map(s => `<div style="font-size:11px; padding:6px 0; border-bottom:1px solid #E5E7EB;">رطوبة: ${s.humidity}% | إضاءة: ${s.light} Lux [${s.time}]</div>`).join('')) + `</div>`;
                     break;
-                case 6: // التقارير
-                    html = `<div class="card"><h3>التقارير والإحصائيات 📊</h3><p style="margin-top:10px; font-size:12px;">إجمالي السجلات: ${sensorHistory.length}</p></div>`;
+                case 6:
+                    let avgH = activeHistory.length ? (activeHistory.reduce((a,b)=>a+b.humidity,0)/activeHistory.length).toFixed(1) : 0;
+                    let avgL = activeHistory.length ? (activeHistory.reduce((a,b)=>a+b.light,0)/activeHistory.length).toFixed(1) : 0;
+                    html = `<div class="card"><h3>التقارير والإحصائيات 📊</h3><p style="margin-top:10px; font-size:12px;">• إجمالي السجلات: ${activeHistory.length}</p><p style="margin-top:6px; font-size:12px;">• متوسط الرطوبة: ${avgH}%</p><p style="margin-top:6px; font-size:12px;">• متوسط الإضاءة: ${avgL} Lux</p></div>`;
                     break;
-                case 7: // التنبيهات
+                case 7:
                     html = `<div class="card"><h3>مركز التنبيهات 🔔</h3>` + (notifications.length === 0 ? '<p style="color:gray; font-size:12px; margin-top:10px;">لا توجد تنبيهات.</p>' : notifications.map(n => `<div style="margin-top:8px; font-size:11px;"><b>${n.title}</b>: ${n.desc}</div>`).join('')) + `</div>`;
                     break;
-                case 8: // حالة النظارة
-                    html = `<div class="card"><h3>حالة النظارة وعرض النظام 📡</h3><p style="font-size:11px; color:gray; margin-top:8px;">تطبيق ويب متكامل للعرض والمناقشة الأكاديمية.</p></div>`;
+                case 8:
+                    html = `<div class="card"><h3>حالة النظارة والحساسات 📡</h3><p style="font-size:11px; color:gray; margin-top:8px;">حالة الاتصال: ${dataSourceMode === 'real' ? 'متصل فعلياً عبر BLE' : 'وضع المحاكاة'}</p></div>`;
                     break;
-                case 9: // الإعدادات
-                    html = `<div class="card"><h3>الإعدادات والخصوصية 🔒</h3><p style="font-size:11px; color:gray; margin-top:8px;">HydroLens - الإصدار 1.0.0 (مشروع تخرج أكاديمي).</p></div>`;
+                case 9:
+                    html = `<div class="card"><h3>الإعدادات والخصوصية 🔒</h3><p style="font-size:11px; color:gray; margin-top:8px;">HydroLens - الإصدار 1.0.0 (مشروع تخرج).</p></div>`;
                     break;
             }
             area.innerHTML = html;
+        }
+
+        function handleChat() {
+            const input = document.getElementById('chatInput');
+            if(!input || !input.value.trim()) return;
+            chatMessages.push({text: input.value, isUser: true});
+            input.value = '';
+            renderPage();
+            setTimeout(() => {
+                chatMessages.push({text: `القراءة الحالية: الرطوبة ${humidityPercent ?? 'غير محددة'}% والإضاءة ${lightLux ?? 'غير محددة'} Lux.`, isUser: false});
+                renderPage();
+            }, 500);
         }
 
         renderPage();
